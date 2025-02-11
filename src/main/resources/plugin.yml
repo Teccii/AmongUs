@@ -1,0 +1,4 @@
+name: AmongUs
+version: '1.0.0'
+main: tecci.amogus.AmongUsPlugin
+api-version: '1.20'
