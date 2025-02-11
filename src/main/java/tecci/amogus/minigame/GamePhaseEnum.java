@@ -3,11 +3,12 @@ package tecci.amogus.minigame;
 public enum GamePhaseEnum {
     LOBBY,
     STARTING,
-    PREACTIVE,
+    INTRO,
     ACTIVE,
+    MEETING_BEGIN,
     DISCUSSION,
     VOTING,
     EJECTING,
     OVER,
-    RESTARTING,
+    CLEAN_UP,
 }

@@ -1,26 +1,19 @@
-package tecci.amogus.minigame;
+package tecci.amogus.minigame.interactables;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import tecci.amogus.managers.GameManager;
+import tecci.amogus.minigame.Interactable;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class Vent {
-    private final GameManager gameManager;
-    private final Location location;
+public class Vent extends Interactable {
     private final Set<Vent> connectedVents = new HashSet<>();
     private final Set<UUID> playersInside = new HashSet<>();
 
-    public Vent(Location location, GameManager gameManager) {
-        this.gameManager = gameManager;
-        this.location = location;
-    }
-
-    public Set<Vent> getConnectedVents() {
-        return connectedVents;
+    public Vent(GameManager gameManager) {
+        super(gameManager);
     }
 
     public boolean isConnectedTo(Vent vent) {
@@ -35,23 +28,22 @@ public class Vent {
         connectedVents.remove(vent);
     }
 
-    public Set<UUID> getPlayersInside() {
-        return playersInside;
-    }
-
-    public boolean isInside(Player player) {
+    public boolean isPlayerInVent(Player player) {
         return playersInside.contains(player.getUniqueId());
     }
 
     public boolean isEmpty() {
-        return playersInside.isEmpty();
+        return connectedVents.isEmpty();
     }
 
     public void addPlayer(Player player) {
         playersInside.add(player.getUniqueId());
     }
 
-    public void removePlayer(Player player) {
-        playersInside.remove(player.getUniqueId());
+    public void removePlayer(Player player) {}
+
+    @Override
+    public void interact(Player player) {
+        //put player inside vent and stuff
     }
 }

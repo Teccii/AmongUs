@@ -5,21 +5,16 @@ import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.*;
 
 public class ImpostorRole extends Role {
-    public ImpostorRole(GameManager gameManager) {
-        super(gameManager);
+    public ImpostorRole(GameManager gameManager, Player player) {
+        super(gameManager, player);
     }
 
     @Override
     public WinCondition getWinCondition() { return WinCondition.IMPOSTOR; }
 
     @Override
-    public boolean canPerformTask(CrewmateTask task) { return task.getTaskType() != TaskType.REGULAR; }
-
-    @Override
-    public boolean canUseVent(Vent vent) { return true; }
-
-    @Override
-    public void useVent(Vent vent) {
+    public boolean canInteract(Interactable interactable) {
+        return false;
         //TODO
     }
 

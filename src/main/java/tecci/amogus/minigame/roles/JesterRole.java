@@ -5,18 +5,19 @@ import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.*;
 
 public class JesterRole extends Role {
-    public JesterRole(GameManager gameManager) {
-        super(gameManager);
+    public JesterRole(GameManager gameManager, Player player) {
+        super(gameManager, player);
     }
 
     @Override
     public WinCondition getWinCondition() { return WinCondition.JESTER; }
 
     @Override
-    public boolean canPerformTask(CrewmateTask task) { return task.getTaskType() != TaskType.REGULAR; }
+    public boolean canInteract(Interactable interactable) {
+        return false;
+        //TODO
+    }
 
-    @Override
-    public boolean canUseVent(Vent vent) { return false; }
 
     @Override
     public boolean canInteractWithPlayer(Player target) { return false; }

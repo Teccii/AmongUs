@@ -26,7 +26,7 @@ public class GlowingManager {
         this.gameManager = gameManager;
     }
 
-    public void addGlowingBlock(Player receiver, Location location, BlockData blockData) {
+    public void setGlowingBlock(Player receiver, Location location, BlockData blockData) {
         Location loc = normalize(location);
         UUID uuid = receiver.getUniqueId();
 
@@ -70,7 +70,7 @@ public class GlowingManager {
         this.glowingBlocks.put(uuid, blockSet);
     }
 
-    public void addGlowingBlocks(Player receiver, Pair<Location, BlockData>[] blocks) {
+    public void setGlowingBlocks(Player receiver, Pair<Location, BlockData>[] blocks) {
         var uuid = receiver.getUniqueId();
         var blockSet = this.glowingBlocks.get(uuid);
 
@@ -116,7 +116,7 @@ public class GlowingManager {
         this.glowingBlocks.put(uuid, blockSet);
     }
 
-    public void removeGlowingBlock(Player receiver, Location location) {
+    public void unsetGlowingBlock(Player receiver, Location location) {
         Location loc = normalize(location);
         UUID uuid = receiver.getUniqueId();
 
@@ -143,7 +143,7 @@ public class GlowingManager {
         this.glowingBlocks.put(uuid, glowingBlocks);
     }
 
-    public void removeAllGlowingBlocks(Player receiver) {
+    public void unsetAllGlowingBlocks(Player receiver) {
         UUID uuid = receiver.getUniqueId();
         var glowingBlocks = this.glowingBlocks.get(uuid);
 
@@ -159,7 +159,7 @@ public class GlowingManager {
         this.glowingBlocks.put(uuid, new GlowingSet<>());
     }
 
-    public void addGlowingEntity(Player receiver, Entity target) {
+    public void setGlowingEntity(Player receiver, Entity target) {
         UUID targetUUID = target.getUniqueId();
         UUID receiverUUID = receiver.getUniqueId();
 
@@ -186,7 +186,7 @@ public class GlowingManager {
         this.glowingEntities.put(receiverUUID, playerSet);
     }
 
-    public void addGlowingEntities(Player receiver, Entity[] targets) {
+    public void setGlowingEntities(Player receiver, Entity[] targets) {
         UUID receiverUUID = receiver.getUniqueId();
 
         var playerSet = this.glowingEntities.get(receiverUUID);
@@ -216,7 +216,7 @@ public class GlowingManager {
         this.glowingEntities.put(receiverUUID, playerSet);
     }
 
-    public void removeGlowingEntity(Player receiver, Entity target) {
+    public void unsetGlowingEntity(Player receiver, Entity target) {
         UUID targetUUID = target.getUniqueId();
         UUID receiverUUID = receiver.getUniqueId();
 
@@ -240,7 +240,7 @@ public class GlowingManager {
         playerSet.remove(targetUUID);
     }
 
-    public void removeAllGlowingEntities(Player receiver) {
+    public void unsetAllGlowingEntities(Player receiver) {
         UUID receiverUUID = receiver.getUniqueId();
         var playerSet = this.glowingEntities.get(receiverUUID);
 

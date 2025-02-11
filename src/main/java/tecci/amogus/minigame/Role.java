@@ -4,8 +4,8 @@ import org.bukkit.entity.Player;
 import tecci.amogus.managers.GameManager;
 
 public abstract class Role {
-    protected GameManager gameManager;
-    protected Player player;
+    protected final GameManager gameManager;
+    protected final Player player;
     protected int meetingsLeft;
 
     public Role(GameManager gameManager, Player player) {
@@ -25,11 +25,7 @@ public abstract class Role {
 
     public abstract WinCondition getWinCondition();
 
-    public abstract boolean canPerformTask(CrewmateTask task);
-    public void performTask(CrewmateTask task) { }
-
-    public abstract boolean canUseVent(Vent vent);
-    public void useVent(Vent vent) { }
+    public abstract boolean canInteract(Interactable interactable);
 
     public abstract boolean canInteractWithPlayer(Player target);
     public void interactWithPlayer(Player target) { }

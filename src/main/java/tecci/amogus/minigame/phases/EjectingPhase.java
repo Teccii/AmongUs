@@ -4,17 +4,17 @@ import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.GamePhase;
 import tecci.amogus.minigame.GamePhaseEnum;
 
-public class LobbyPhase extends GamePhase {
-    public LobbyPhase(GameManager gameManager) {
+public class EjectingPhase extends GamePhase {
+    public EjectingPhase(GameManager gameManager) {
         super(gameManager);
     }
 
     @Override
-    public GamePhaseEnum getPhase() { return GamePhaseEnum.LOBBY; }
+    public GamePhaseEnum getPhase() { return GamePhaseEnum.EJECTING; }
 
     @Override
     public boolean isValidTransition(GamePhaseEnum nextPhase) {
-        return nextPhase == GamePhaseEnum.STARTING;
+        return nextPhase == GamePhaseEnum.ACTIVE || nextPhase == GamePhaseEnum.OVER;
     }
 
     @Override

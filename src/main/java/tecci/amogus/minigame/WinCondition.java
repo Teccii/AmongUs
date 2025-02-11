@@ -4,6 +4,4 @@ public enum WinCondition {
     CREWMATE,
     IMPOSTOR,
     JESTER,
-    LAWYER,
-    EXECUTIONER,
 }

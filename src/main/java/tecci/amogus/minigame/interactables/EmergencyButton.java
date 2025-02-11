@@ -1,30 +1,26 @@
-package tecci.amogus.minigame.tasks;
+package tecci.amogus.minigame.interactables;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import tecci.amogus.gui.EmergencyButtonItem;
 import tecci.amogus.gui.ItemUtil;
 import tecci.amogus.managers.GameManager;
-import tecci.amogus.minigame.CrewmateTask;
+import tecci.amogus.minigame.GuiInteractable;
 import tecci.amogus.minigame.Role;
-import tecci.amogus.minigame.TaskType;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.SimpleItem;
 import xyz.xenondevs.invui.window.Window;
 
-public class EmergencyButtonTask extends CrewmateTask {
-    public EmergencyButtonTask(GameManager gameManager) {
+public class EmergencyButton extends GuiInteractable {
+    public EmergencyButton(GameManager gameManager) {
         super(gameManager);
     }
 
     @Override
-    public TaskType getTaskType() {
-        return TaskType.EMERGENCY;
-    }
+    public Gui getGui(Player player) {
+        Role role = gameManager.getPlayerManager().getRole(player);
 
-    @Override
-    public Gui getGui(Role role) {
         if (role.getMeetingsLeft() > 0) {
             return Gui.normal()
                 .setStructure(
@@ -33,7 +29,7 @@ public class EmergencyButtonTask extends CrewmateTask {
                     ". X X X",
                     ". X X X"
                 )
-                .addIngredient('X', new EmergencyButtonItem())
+                .addIngredient('X', new EmergencyButtonItem(gameManager))
                 .addIngredient('G', new SimpleItem(ItemUtil.hideTooltip(new ItemBuilder(Material.NAUTILUS_SHELL).setCustomModelData(3))))
                 .build();
         }
@@ -51,11 +47,11 @@ public class EmergencyButtonTask extends CrewmateTask {
     }
 
     @Override
-    public void perform(Player player, Role role) {
+    public void interact(Player player) {
         Window.single()
-            .setGui(getGui(role))
-            .setTitle("Emergency Button")
-            .setCloseable(true)
-            .open(player);
+                .setGui(getGui(player))
+                .setTitle("Emergency Button")
+                .setCloseable(true)
+                .open(player);
     }
 }
