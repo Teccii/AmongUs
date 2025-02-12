@@ -13,8 +13,6 @@ public final class AmongUsPlugin extends JavaPlugin {
         super.onEnable();
         InvUI.getInstance().setPlugin(this);
 
-        //test
-
         gameManager = new GameManager(this);
 
         getServer().getPluginManager().registerEvents(new PlayerEventListener(gameManager), this);
