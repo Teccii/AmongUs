@@ -31,7 +31,7 @@ public class EmergencyButton extends GuiInteractable {
                     ". X X X"
                 )
                 .addIngredient('X', new EmergencyButtonItem(gameManager))
-                .addIngredient('G', new SimpleItem(GuiUtil.hideTooltip(new ItemBuilder(Material.NAUTILUS_SHELL).setCustomModelData(3))))
+                .addIngredient('G', new SimpleItem(GuiUtil.hideTooltip(new ItemBuilder(Material.NAUTILUS_SHELL))))
                 .build();
         }
 
@@ -42,8 +42,8 @@ public class EmergencyButton extends GuiInteractable {
                 ". X X X",
                 ". X X X"
             )
-            .addIngredient('X', new SimpleItem(GuiUtil.hideTooltip(new ItemBuilder(Material.NAUTILUS_SHELL).setCustomModelData(2))))
-            .addIngredient('G', new SimpleItem(GuiUtil.hideTooltip(new ItemBuilder(Material.NAUTILUS_SHELL).setCustomModelData(4))))
+            .addIngredient('X', new SimpleItem(GuiUtil.hideTooltip(new ItemBuilder(Material.NAUTILUS_SHELL))))
+            .addIngredient('G', new SimpleItem(GuiUtil.hideTooltip(new ItemBuilder(Material.NAUTILUS_SHELL))))
             .build();
     }
 
