@@ -8,19 +8,19 @@ import tecci.amogus.util.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 
 public class GameMap {
     private final File sourceWorldFolder;
-    private final Set<Interactable> interactables;
+    private final Function<World, Set<Interactable>> interactableProvider;
     private File activeWorldFolder;
+    private Set<Interactable> activeInteractables;
     private World world;
 
-    public GameMap(File worldFolder, String worldName, boolean loadOnInit, Function<Set<Interactable>, Set<Interactable>> addInteractables) {
+    public GameMap(File worldFolder, String worldName, boolean loadOnInit, Function<World, Set<Interactable>> interactableProvider) {
         this.sourceWorldFolder = new File(worldFolder, worldName);
-        this.interactables = addInteractables.apply(new HashSet<>());
+        this.interactableProvider = interactableProvider;
 
         if (loadOnInit) {
             this.load();
@@ -48,6 +48,7 @@ public class GameMap {
         this.world = Bukkit.createWorld(new WorldCreator(activeWorldFolder.getName()));
 
         if (world != null) {
+            this.activeInteractables = interactableProvider.apply(world);
             world.setAutoSave(false);
         }
 
@@ -65,6 +66,7 @@ public class GameMap {
 
         world = null;
         activeWorldFolder = null;
+        activeInteractables = null;
     }
 
     public boolean restoreFromSource() {
@@ -75,6 +77,10 @@ public class GameMap {
 
     public boolean isLoaded() {
         return getWorld() != null;
+    }
+
+    public Set<Interactable> getActiveInteractables() {
+        return activeInteractables;
     }
 
     public World getWorld() {

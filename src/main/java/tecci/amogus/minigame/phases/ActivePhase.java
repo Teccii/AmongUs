@@ -2,7 +2,6 @@ package tecci.amogus.minigame.phases;
 
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.GamePhase;
-import tecci.amogus.minigame.GamePhaseEnum;
 
 public class ActivePhase extends GamePhase {
     public ActivePhase(GameManager gameManager) {
@@ -10,7 +9,7 @@ public class ActivePhase extends GamePhase {
     }
 
     @Override
-    public GamePhaseEnum getPhase() { return GamePhaseEnum.ACTIVE; }
+    public GamePhaseEnum getPhaseType() { return GamePhaseEnum.ACTIVE; }
 
     @Override
     public boolean isValidTransition(GamePhaseEnum nextPhase) {

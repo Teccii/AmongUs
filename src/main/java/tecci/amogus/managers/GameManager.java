@@ -7,8 +7,6 @@ import tecci.amogus.minigame.GamePhase;
 import tecci.amogus.minigame.MinigameConfig;
 import tecci.amogus.minigame.phases.CleanUpPhase;
 
-import java.io.File;
-
 public class GameManager {
     private final AmongUsPlugin plugin;
     private MinigameConfig config;
@@ -24,11 +22,6 @@ public class GameManager {
         this.plugin = plugin;
         config = new MinigameConfig();
 
-        File gameMapsFolder = new File(plugin.getDataFolder(), "gameMaps");
-        if (!gameMapsFolder.exists()) {
-            gameMapsFolder.mkdirs();
-        }
-
         mapManager = new MapManager(this);
         glowingManager = new GlowingManager(this);
         playerManager = new PlayerManager(this);
@@ -36,6 +29,8 @@ public class GameManager {
 
         setPhase(new CleanUpPhase(this));
     }
+
+    public AmongUsPlugin getPlugin() { return plugin; }
 
     public MinigameConfig getConfig() { return config; }
     public void setConfig(MinigameConfig config) {
@@ -47,14 +42,21 @@ public class GameManager {
     public PlayerManager getPlayerManager() { return playerManager; }
     public ProtocolManager getProtocolManager() { return protocolManager; }
 
-    public GamePhase getPhase() { return currentPhase; }
+    public GamePhase getCurrentPhase() { return currentPhase; }
     public void setPhase(GamePhase nextPhase) {
-        if (currentPhase != null && !currentPhase.isValidTransition(nextPhase.getPhase())) {
+        if (currentPhase != null && !currentPhase.isValidTransition(nextPhase.getPhaseType())) {
             return;
         }
 
-        currentPhase.onEnd();
+        if (currentPhase != null) {
+            currentPhase.onEnd();
+        }
+
         currentPhase = nextPhase;
         currentPhase.onStart();
+    }
+
+    public void cleanUp() {
+        mapManager.cleanUp();
     }
 }

@@ -13,6 +13,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import tecci.amogus.util.LocationUtil;
 
 import java.util.*;
 
@@ -27,7 +28,7 @@ public class GlowingManager {
     }
 
     public void setGlowingBlock(Player receiver, Location location, BlockData blockData) {
-        Location loc = normalize(location);
+        Location loc = LocationUtil.normalize(location);
         UUID uuid = receiver.getUniqueId();
 
         var blockSet = this.glowingBlocks.get(uuid);
@@ -79,7 +80,7 @@ public class GlowingManager {
         }
 
         for (Pair<Location, BlockData> pair : blocks) {
-            Location loc = normalize(pair.getFirst());
+            Location loc = LocationUtil.normalize(pair.getFirst());
 
             if (blockSet.has(loc)) {
                 continue;
@@ -117,7 +118,7 @@ public class GlowingManager {
     }
 
     public void unsetGlowingBlock(Player receiver, Location location) {
-        Location loc = normalize(location);
+        Location loc = LocationUtil.normalize(location);
         UUID uuid = receiver.getUniqueId();
 
         var glowingBlocks = this.glowingBlocks.get(uuid);
@@ -255,10 +256,6 @@ public class GlowingManager {
         }
 
         this.glowingEntities.put(receiverUUID, new GlowingSet<>());
-    }
-
-    static Location normalize(Location location) {
-        return new Location(location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
     }
 }
 

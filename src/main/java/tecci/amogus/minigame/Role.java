@@ -7,6 +7,7 @@ public abstract class Role {
     protected final GameManager gameManager;
     protected final Player player;
     protected int meetingsLeft;
+    protected boolean isDead;
 
     public Role(GameManager gameManager, Player player) {
         this.gameManager = gameManager;
@@ -21,6 +22,14 @@ public abstract class Role {
 
     public void setMeetingsLeft(int meetingsLeft) {
         this.meetingsLeft = meetingsLeft;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void setDead(boolean isDead) {
+        this.isDead = isDead;
     }
 
     public abstract WinCondition getWinCondition();

@@ -1,5 +1,6 @@
 package tecci.amogus.minigame.interactables;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.Interactable;
@@ -12,8 +13,8 @@ public class Vent extends Interactable {
     private final Set<Vent> connectedVents = new HashSet<>();
     private final Set<UUID> playersInside = new HashSet<>();
 
-    public Vent(GameManager gameManager) {
-        super(gameManager);
+    public Vent(GameManager gameManager, Location location) {
+        super(gameManager, location);
     }
 
     public boolean isConnectedTo(Vent vent) {

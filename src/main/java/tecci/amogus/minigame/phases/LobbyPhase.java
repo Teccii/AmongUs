@@ -2,7 +2,6 @@ package tecci.amogus.minigame.phases;
 
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.GamePhase;
-import tecci.amogus.minigame.GamePhaseEnum;
 
 public class LobbyPhase extends GamePhase {
     public LobbyPhase(GameManager gameManager) {
@@ -10,7 +9,7 @@ public class LobbyPhase extends GamePhase {
     }
 
     @Override
-    public GamePhaseEnum getPhase() { return GamePhaseEnum.LOBBY; }
+    public GamePhaseEnum getPhaseType() { return GamePhaseEnum.LOBBY; }
 
     @Override
     public boolean isValidTransition(GamePhaseEnum nextPhase) {

@@ -1,8 +1,8 @@
 package tecci.amogus.minigame.phases;
 
 import tecci.amogus.managers.GameManager;
+import tecci.amogus.managers.MapManager.MapId;
 import tecci.amogus.minigame.GamePhase;
-import tecci.amogus.minigame.GamePhaseEnum;
 
 public class CleanUpPhase extends GamePhase {
     public CleanUpPhase(GameManager gameManager) {
@@ -10,7 +10,7 @@ public class CleanUpPhase extends GamePhase {
     }
 
     @Override
-    public GamePhaseEnum getPhase() { return GamePhaseEnum.CLEAN_UP; }
+    public GamePhaseEnum getPhaseType() { return GamePhaseEnum.CLEAN_UP; }
 
     @Override
     public boolean isValidTransition(GamePhaseEnum nextPhase) {
@@ -18,7 +18,10 @@ public class CleanUpPhase extends GamePhase {
     }
 
     @Override
-    public void onStart() { }
+    public void onStart() {
+        gameManager.getMapManager().changeMap(MapId.LOBBY);
+        gameManager.setPhase(new LobbyPhase(gameManager));
+    }
 
     @Override
     public void onEnd() { }
