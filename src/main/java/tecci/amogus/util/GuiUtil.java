@@ -1,9 +1,9 @@
-package tecci.amogus.gui;
+package tecci.amogus.util;
 
 import org.bukkit.inventory.meta.ItemMeta;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 
-public class ItemUtil {
+public final class GuiUtil {
     public static ItemBuilder hideTooltip(ItemBuilder builder) {
         return builder.addModifier(item -> {
             ItemMeta meta = item.getItemMeta();

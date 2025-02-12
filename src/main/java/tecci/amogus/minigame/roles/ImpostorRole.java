@@ -2,7 +2,9 @@ package tecci.amogus.minigame.roles;
 
 import org.bukkit.entity.Player;
 import tecci.amogus.managers.GameManager;
-import tecci.amogus.minigame.*;
+import tecci.amogus.minigame.Interactable;
+import tecci.amogus.minigame.Role;
+import tecci.amogus.minigame.WinCondition;
 
 public class ImpostorRole extends Role {
     public ImpostorRole(GameManager gameManager, Player player) {

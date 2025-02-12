@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import tecci.amogus.minigame.Role;
+
 import java.util.*;
 
 public class PlayerManager {

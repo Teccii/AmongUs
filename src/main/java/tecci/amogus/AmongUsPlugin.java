@@ -1,4 +1,5 @@
 package tecci.amogus;
+
 import org.bukkit.plugin.java.JavaPlugin;
 import tecci.amogus.managers.GameManager;
 import xyz.xenondevs.invui.InvUI;

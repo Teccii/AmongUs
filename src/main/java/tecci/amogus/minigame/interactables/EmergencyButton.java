@@ -3,7 +3,7 @@ package tecci.amogus.minigame.interactables;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import tecci.amogus.gui.EmergencyButtonItem;
-import tecci.amogus.gui.ItemUtil;
+import tecci.amogus.util.GuiUtil;
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.GuiInteractable;
 import tecci.amogus.minigame.Role;
@@ -30,7 +30,7 @@ public class EmergencyButton extends GuiInteractable {
                     ". X X X"
                 )
                 .addIngredient('X', new EmergencyButtonItem(gameManager))
-                .addIngredient('G', new SimpleItem(ItemUtil.hideTooltip(new ItemBuilder(Material.NAUTILUS_SHELL).setCustomModelData(3))))
+                .addIngredient('G', new SimpleItem(GuiUtil.hideTooltip(new ItemBuilder(Material.NAUTILUS_SHELL).setCustomModelData(3))))
                 .build();
         }
 
@@ -41,8 +41,8 @@ public class EmergencyButton extends GuiInteractable {
                 ". X X X",
                 ". X X X"
             )
-            .addIngredient('X', new SimpleItem(ItemUtil.hideTooltip(new ItemBuilder(Material.NAUTILUS_SHELL).setCustomModelData(2))))
-            .addIngredient('G', new SimpleItem(ItemUtil.hideTooltip(new ItemBuilder(Material.NAUTILUS_SHELL).setCustomModelData(4))))
+            .addIngredient('X', new SimpleItem(GuiUtil.hideTooltip(new ItemBuilder(Material.NAUTILUS_SHELL).setCustomModelData(2))))
+            .addIngredient('G', new SimpleItem(GuiUtil.hideTooltip(new ItemBuilder(Material.NAUTILUS_SHELL).setCustomModelData(4))))
             .build();
     }
 

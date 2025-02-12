@@ -6,6 +6,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 import tecci.amogus.managers.GameManager;
+import tecci.amogus.util.GuiUtil;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
@@ -19,7 +20,7 @@ public class EmergencyButtonItem extends AbstractItem {
 
     @Override
     public ItemProvider getItemProvider() {
-        return ItemUtil.hideTooltip(new ItemBuilder(Material.NAUTILUS_SHELL).setCustomModelData(1));
+        return GuiUtil.hideTooltip(new ItemBuilder(Material.NAUTILUS_SHELL).setCustomModelData(1));
     }
 
     @Override

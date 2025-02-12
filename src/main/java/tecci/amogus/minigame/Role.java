@@ -24,7 +24,6 @@ public abstract class Role {
     }
 
     public abstract WinCondition getWinCondition();
-
     public abstract boolean canInteract(Interactable interactable);
 
     public abstract boolean canInteractWithPlayer(Player target);
