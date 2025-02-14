@@ -9,15 +9,17 @@ public class LobbyPhase extends GamePhase {
     }
 
     @Override
-    public GamePhaseEnum getPhaseType() { return GamePhaseEnum.LOBBY; }
+    public GamePhaseType getPhaseType() { return GamePhaseType.LOBBY; }
 
     @Override
-    public boolean isValidTransition(GamePhaseEnum nextPhase) {
-        return nextPhase == GamePhaseEnum.STARTING;
+    public boolean isValidTransition(GamePhaseType nextPhase) {
+        return nextPhase == GamePhaseType.STARTING;
     }
 
     @Override
-    public void onStart() { }
+    public void onStart() {
+        gameManager.setPhase(new ActivePhase(gameManager));
+    }
 
     @Override
     public void onEnd() { }

@@ -5,12 +5,14 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import tecci.amogus.gui.EnumItem;
 import tecci.amogus.gui.NumberItem;
 import tecci.amogus.gui.OptionsBookTabItem;
 import tecci.amogus.gui.ToggleItem;
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.GuiInteractable;
 import tecci.amogus.minigame.MinigameConfig;
+import tecci.amogus.minigame.MinigameConfig.TaskBarUpdates;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.gui.TabGui;
 import xyz.xenondevs.invui.gui.structure.Markers;
@@ -21,7 +23,7 @@ import xyz.xenondevs.invui.window.Window;
 import java.util.List;
 
 public class OptionsBook extends GuiInteractable {
-    private MinigameConfig config;
+    private final MinigameConfig config;
 
     public OptionsBook(GameManager gameManager, Location location) {
         super(gameManager, location);
@@ -50,9 +52,9 @@ public class OptionsBook extends GuiInteractable {
                         .addAllItemFlags()
                         .setDisplayName(new ComponentBuilder("Impostor Wallhacks").color(ChatColor.WHITE).italic(false).build())
                 ))
-                .addIngredient('1', new NumberItem(value -> config.setImpostorCount(value), Object::toString, 1, 3, config.getImpostorCount()))
-                .addIngredient('2', new NumberItem(value -> config.setImpostorKillCooldown(value), value -> String.valueOf(value * 2.5 + 7.5), 1, 21, config.getImpostorKillCooldown()))
-                .addIngredient('3', new ToggleItem(value -> config.setImpostorWallhacks(value), config.getImpostorWallhacks()))
+                .addIngredient('1', new NumberItem(config::setImpostorCount, Object::toString, 1, 3, config.getImpostorCount()))
+                .addIngredient('2', new NumberItem(config::setImpostorKillCooldown, value -> String.valueOf(value * 2.5 + 7.5), 1, 21, config.getImpostorKillCooldown()))
+                .addIngredient('3', new ToggleItem(config::setImpostorWallhacks, config.getImpostorWallhacks()))
                 .build();
 
         Gui meetingsTab = Gui.normal()
@@ -87,12 +89,12 @@ public class OptionsBook extends GuiInteractable {
                         .addAllItemFlags()
                         .setDisplayName(new ComponentBuilder("Confirm Ejects").color(ChatColor.WHITE).italic(false).build())
                 ))
-                .addIngredient('1', new NumberItem(value -> config.setEmergencyMeetings(value), Object::toString, 0, 9, config.getEmergencyMeetings()))
-                .addIngredient('2', new NumberItem(value -> config.setEmergencyCooldown(value), value -> String.valueOf((value * 5.0)), 0, 12, config.getEmergencyCooldown()))
-                .addIngredient('3', new NumberItem(value -> config.setDiscussionTime(value), value -> String.valueOf(value * 15.0), 0, 8, config.getDiscussionTime()))
-                .addIngredient('4', new NumberItem(value -> config.setVotingTime(value), value -> String.valueOf(value * 15.0), 0, 8, config.getVotingTime()))
-                .addIngredient('5', new ToggleItem(value -> config.setAnonymousVotes(value), config.getAnonymousVotes()))
-                .addIngredient('6', new ToggleItem(value -> config.setConfirmEjects(value), config.getConfirmEjects()))
+                .addIngredient('1', new NumberItem(config::setEmergencyMeetings, Object::toString, 0, 9, config.getEmergencyMeetings()))
+                .addIngredient('2', new NumberItem(config::setEmergencyCooldown, value -> String.valueOf((value * 5.0)), 0, 12, config.getEmergencyCooldown()))
+                .addIngredient('3', new NumberItem(config::setDiscussionTime, value -> String.valueOf(value * 15.0), 0, 8, config.getDiscussionTime()))
+                .addIngredient('4', new NumberItem(config::setVotingTime, value -> String.valueOf(value * 15.0), 0, 8, config.getVotingTime()))
+                .addIngredient('5', new ToggleItem(config::setAnonymousVotes, config.getAnonymousVotes()))
+                .addIngredient('6', new ToggleItem(config::setConfirmEjects, config.getConfirmEjects()))
                 .build();
 
         Gui tasksTab = Gui.normal()
@@ -123,14 +125,11 @@ public class OptionsBook extends GuiInteractable {
                         .addAllItemFlags()
                         .setDisplayName(new ComponentBuilder("Visual Tasks").color(ChatColor.WHITE).italic(false).build())
                 ))
-                .addIngredient('1', new SimpleItem(new ItemBuilder(Material.NAUTILUS_SHELL)
-                        .addAllItemFlags()
-                        .setDisplayName(new ComponentBuilder("TODO: ENUM ITEM").color(ChatColor.GREEN).italic(false).build())
-                ))
-                .addIngredient('2', new NumberItem(value -> config.setCommonTaskCount(value), Object::toString, 0, 2, config.getCommonTaskCount()))
-                .addIngredient('3', new NumberItem(value -> config.setLongTaskCount(value), Object::toString, 0, 2, config.getLongTaskCount()))
-                .addIngredient('4', new NumberItem(value -> config.setShortTaskCount(value), Object::toString, 0, 5, config.getShortTaskCount()))
-                .addIngredient('5', new ToggleItem(value -> config.setVisualTasks(value), config.getVisualTasks()))
+                .addIngredient('1', new EnumItem<>(config::setTaskBarUpdates, TaskBarUpdates::toString, config.getTaskBarUpdates()))
+                .addIngredient('2', new NumberItem(config::setCommonTaskCount, Object::toString, 0, 2, config.getCommonTaskCount()))
+                .addIngredient('3', new NumberItem(config::setLongTaskCount, Object::toString, 0, 2, config.getLongTaskCount()))
+                .addIngredient('4', new NumberItem(config::setShortTaskCount, Object::toString, 0, 5, config.getShortTaskCount()))
+                .addIngredient('5', new ToggleItem(config::setVisualTasks, config.getVisualTasks()))
                 .build();
 
         return TabGui.normal()

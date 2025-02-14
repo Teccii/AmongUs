@@ -10,11 +10,11 @@ public class CleanUpPhase extends GamePhase {
     }
 
     @Override
-    public GamePhaseEnum getPhaseType() { return GamePhaseEnum.CLEAN_UP; }
+    public GamePhaseType getPhaseType() { return GamePhaseType.CLEAN_UP; }
 
     @Override
-    public boolean isValidTransition(GamePhaseEnum nextPhase) {
-        return nextPhase == GamePhaseEnum.LOBBY;
+    public boolean isValidTransition(GamePhaseType nextPhase) {
+        return nextPhase == GamePhaseType.LOBBY;
     }
 
     @Override

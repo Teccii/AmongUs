@@ -9,11 +9,11 @@ public class VotingPhase extends GamePhase {
     }
 
     @Override
-    public GamePhaseEnum getPhaseType() { return GamePhaseEnum.VOTING; }
+    public GamePhaseType getPhaseType() { return GamePhaseType.VOTING; }
 
     @Override
-    public boolean isValidTransition(GamePhaseEnum nextPhase) {
-        return nextPhase == GamePhaseEnum.EJECTING || nextPhase == GamePhaseEnum.OVER;
+    public boolean isValidTransition(GamePhaseType nextPhase) {
+        return nextPhase == GamePhaseType.EJECTING || nextPhase == GamePhaseType.OVER;
     }
 
     @Override

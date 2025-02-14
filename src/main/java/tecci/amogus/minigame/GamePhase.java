@@ -3,7 +3,7 @@ package tecci.amogus.minigame;
 import tecci.amogus.managers.GameManager;
 
 public abstract class GamePhase {
-    public enum GamePhaseEnum {
+    public enum GamePhaseType {
         LOBBY,              //LOBBY ->              STARTING
         STARTING,           //STARTING ->           INTRO | LOBBY
         INTRO,              //INTRO ->              ACTIVE
@@ -22,8 +22,8 @@ public abstract class GamePhase {
         this.gameManager = gameManager;
     }
 
-    public abstract GamePhaseEnum getPhaseType();
-    public abstract boolean isValidTransition(GamePhaseEnum nextPhase);
+    public abstract GamePhaseType getPhaseType();
+    public abstract boolean isValidTransition(GamePhaseType nextPhase);
     public abstract void onStart();
     public abstract void onEnd();
 }

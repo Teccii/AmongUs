@@ -9,11 +9,11 @@ public class IntroPhase extends GamePhase {
     }
 
     @Override
-    public GamePhaseEnum getPhaseType() { return GamePhaseEnum.INTRO; }
+    public GamePhaseType getPhaseType() { return GamePhaseType.INTRO; }
 
     @Override
-    public boolean isValidTransition(GamePhaseEnum nextPhase) {
-        return nextPhase == GamePhaseEnum.ACTIVE;
+    public boolean isValidTransition(GamePhaseType nextPhase) {
+        return nextPhase == GamePhaseType.ACTIVE;
     }
 
     @Override

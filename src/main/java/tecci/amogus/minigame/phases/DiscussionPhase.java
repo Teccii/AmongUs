@@ -9,11 +9,11 @@ public class DiscussionPhase extends GamePhase {
     }
 
     @Override
-    public GamePhaseEnum getPhaseType() { return GamePhaseEnum.DISCUSSION; }
+    public GamePhaseType getPhaseType() { return GamePhaseType.DISCUSSION; }
 
     @Override
-    public boolean isValidTransition(GamePhaseEnum nextPhase) {
-        return nextPhase == GamePhaseEnum.VOTING || nextPhase == GamePhaseEnum.OVER;
+    public boolean isValidTransition(GamePhaseType nextPhase) {
+        return nextPhase == GamePhaseType.VOTING || nextPhase == GamePhaseType.OVER;
     }
 
     @Override

@@ -4,7 +4,16 @@ public class MinigameConfig {
     public enum TaskBarUpdates {
         ALWAYS,
         MEETINGS,
-        NEVER
+        NEVER;
+
+        @Override
+        public String toString() {
+            return switch (this) {
+                case ALWAYS -> "Always";
+                case MEETINGS -> "Meetings";
+                case NEVER -> "Never";
+            };
+        }
     }
 
     private int impostorCount = 2;

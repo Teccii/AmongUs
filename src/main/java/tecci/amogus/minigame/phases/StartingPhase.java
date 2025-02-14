@@ -9,11 +9,11 @@ public class StartingPhase extends GamePhase {
     }
 
     @Override
-    public GamePhaseEnum getPhaseType() { return GamePhaseEnum.STARTING; }
+    public GamePhaseType getPhaseType() { return GamePhaseType.STARTING; }
 
     @Override
-    public boolean isValidTransition(GamePhaseEnum nextPhase) {
-        return nextPhase == GamePhaseEnum.LOBBY || nextPhase == GamePhaseEnum.INTRO;
+    public boolean isValidTransition(GamePhaseType nextPhase) {
+        return nextPhase == GamePhaseType.LOBBY || nextPhase == GamePhaseType.INTRO;
     }
 
     @Override

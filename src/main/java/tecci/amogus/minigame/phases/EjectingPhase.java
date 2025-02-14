@@ -9,11 +9,11 @@ public class EjectingPhase extends GamePhase {
     }
 
     @Override
-    public GamePhaseEnum getPhaseType() { return GamePhaseEnum.EJECTING; }
+    public GamePhaseType getPhaseType() { return GamePhaseType.EJECTING; }
 
     @Override
-    public boolean isValidTransition(GamePhaseEnum nextPhase) {
-        return nextPhase == GamePhaseEnum.ACTIVE || nextPhase == GamePhaseEnum.OVER;
+    public boolean isValidTransition(GamePhaseType nextPhase) {
+        return nextPhase == GamePhaseType.ACTIVE || nextPhase == GamePhaseType.OVER;
     }
 
     @Override

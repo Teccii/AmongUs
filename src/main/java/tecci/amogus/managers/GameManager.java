@@ -3,6 +3,7 @@ package tecci.amogus.managers;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import tecci.amogus.AmongUsPlugin;
+import tecci.amogus.adapters.HeldItemAdapter;
 import tecci.amogus.minigame.GamePhase;
 import tecci.amogus.minigame.MinigameConfig;
 import tecci.amogus.minigame.phases.CleanUpPhase;
@@ -13,6 +14,7 @@ public class GameManager {
     private GamePhase currentPhase;
 
     //Other Managers
+    private final ItemManager itemManager;
     private final MapManager mapManager;
     private final GlowingManager glowingManager;
     private final PlayerManager playerManager;
@@ -22,10 +24,13 @@ public class GameManager {
         this.plugin = plugin;
         config = new MinigameConfig();
 
+        itemManager = new ItemManager(this);
         mapManager = new MapManager(this);
         glowingManager = new GlowingManager(this);
         playerManager = new PlayerManager(this);
         protocolManager = ProtocolLibrary.getProtocolManager();
+
+        protocolManager.addPacketListener(new HeldItemAdapter(this));
 
         setPhase(new CleanUpPhase(this));
     }
@@ -37,6 +42,7 @@ public class GameManager {
         this.config = config;
     }
 
+    public ItemManager getItemManager() { return itemManager; }
     public MapManager getMapManager() { return mapManager; }
     public GlowingManager getGlowingManager() { return glowingManager; }
     public PlayerManager getPlayerManager() { return playerManager; }
@@ -56,7 +62,7 @@ public class GameManager {
         currentPhase.onStart();
     }
 
-    public void cleanUp() {
-        mapManager.cleanUp();
+    public void onDisable() {
+        mapManager.onDisable();
     }
 }

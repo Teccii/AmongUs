@@ -1,6 +1,5 @@
 package tecci.amogus.managers;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import tecci.amogus.GameMap;
 import tecci.amogus.minigame.Interactable;
@@ -81,7 +80,7 @@ public class MapManager {
         maps.get(currentMapId).load();
     }
 
-    public void cleanUp() {
+    public void onDisable() {
         for (GameMap map : maps.values()) {
             if (map.isLoaded()) {
                 map.unload();
