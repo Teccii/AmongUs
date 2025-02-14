@@ -1,8 +1,10 @@
 package tecci.amogus.items;
 
-import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -14,17 +16,13 @@ import xyz.xenondevs.invui.item.ItemProvider;
 import java.util.UUID;
 
 public abstract class CustomItem {
-    private final UUID uuid;
-
-    public CustomItem() {
-        this.uuid = UUID.randomUUID();
-    }
+    private final UUID uuid = UUID.randomUUID();
 
     public UUID getUuid() {
         return uuid;
     }
 
-    public abstract ItemProvider getItemProvider();
+    protected abstract ItemProvider getItemProvider();
     public ItemStack getItemStack() {
         ItemStack item = getItemProvider().get();
         ItemMeta meta = item.getItemMeta();
@@ -41,6 +39,8 @@ public abstract class CustomItem {
         return item;
     }
 
-    public void onClick(ClickType clickType, Player player, PlayerInteractEvent event) { }
-    public void onTick() { }
+    public void onTick(Player player) { }
+
+    public void onClick(ClickType clickType, Player player) { }
+    public void onClickEntity(ClickType clickType, Player player, Entity target) { }
 }

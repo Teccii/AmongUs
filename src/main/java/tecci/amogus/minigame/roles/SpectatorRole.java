@@ -17,8 +17,13 @@ public class SpectatorRole extends Role {
     }
 
     @Override
+    public void setRoleItems() {
+        //TODO
+    }
+
+    @Override
     public boolean canInteract(Interactable interactable) {
-        return true;
+        return false;
         //TODO
     }
 

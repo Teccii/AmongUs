@@ -73,6 +73,16 @@ public class ItemManager {
         player.getInventory().setItem(slotIndex, item.getItemStack());
     }
 
+    public void setLoadout(Player player, Map<Integer, CustomItem> loadout) {
+        clearInventory(player);
+
+        for (int index : loadout.keySet()) {
+            CustomItem item = loadout.get(index);
+
+            setItem(player, index, item);
+        }
+    }
+
     public void clearInventory(Player player) {
         PlayerInventory inventory = player.getInventory();
 

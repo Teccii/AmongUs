@@ -15,6 +15,11 @@ public class CrewmateRole extends Role {
     public WinCondition getWinCondition() { return WinCondition.CREWMATE; }
 
     @Override
+    public void setRoleItems() {
+        //TODO
+    }
+
+    @Override
     public boolean canInteract(Interactable interactable) {
         return false;
         //TODO

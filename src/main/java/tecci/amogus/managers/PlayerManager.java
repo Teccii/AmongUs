@@ -7,13 +7,14 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import tecci.amogus.minigame.Role;
+import tecci.amogus.minigame.roles.CrewmateRole;
+import tecci.amogus.minigame.roles.ImpostorRole;
+import tecci.amogus.minigame.roles.JesterRole;
 import tecci.amogus.util.LocationUtil;
 import tecci.amogus.util.RandomUtil;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import javax.swing.plaf.nimbus.NimbusStyle;
+import java.util.*;
 
 public class PlayerManager {
     private final GameManager gameManager;
@@ -40,6 +41,10 @@ public class PlayerManager {
         playerRoles.remove(player.getUniqueId());
     }
 
+    public void clearRoles() {
+        playerRoles.clear();
+    }
+
     public boolean isDead(Player player) {
         return playerRoles.get(player.getUniqueId()).isDead();
     }
@@ -49,6 +54,10 @@ public class PlayerManager {
     }
 
     public boolean hostExists() { return hostExists; }
+
+    public void distributeRoles() {
+
+    }
 
     //teleports people into random positions inside a region
     public void teleportAllRandom(double minX, double maxX, double y, double minZ, double maxZ) {

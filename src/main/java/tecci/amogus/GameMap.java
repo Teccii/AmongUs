@@ -1,6 +1,7 @@
 package tecci.amogus;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import tecci.amogus.minigame.Interactable;
@@ -14,6 +15,7 @@ import java.util.function.Function;
 public class GameMap {
     private final File sourceWorldFolder;
     private final Function<World, Set<Interactable>> interactableProvider;
+    private double spawnX, spawnY, spawnZ;
     private File activeWorldFolder;
     private Set<Interactable> activeInteractables;
     private World world;
@@ -85,5 +87,9 @@ public class GameMap {
 
     public World getWorld() {
         return world;
+    }
+
+    public Location getSpawnLocation() {
+        return new Location(world, spawnX, spawnY, spawnZ);
     }
 }

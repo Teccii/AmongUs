@@ -24,7 +24,7 @@ public class ItemTickTask extends BukkitRunnable {
                 CustomItem customItem = itemManager.getItem(item);
 
                 if (customItem != null) {
-                    customItem.onTick();
+                    customItem.onTick(player);
 
                     inventory.setItem(i, customItem.getItemStack());
                 }

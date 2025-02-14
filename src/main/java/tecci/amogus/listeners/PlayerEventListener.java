@@ -4,10 +4,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import tecci.amogus.items.CustomItem;
@@ -16,6 +19,7 @@ import tecci.amogus.managers.PlayerManager;
 import tecci.amogus.minigame.GamePhase.GamePhaseType;
 import tecci.amogus.minigame.Interactable;
 import tecci.amogus.minigame.Role;
+import tecci.amogus.minigame.phases.LobbyPhase;
 import tecci.amogus.minigame.roles.LobbyRole;
 import tecci.amogus.minigame.roles.SpectatorRole;
 
@@ -24,6 +28,36 @@ public class PlayerEventListener implements Listener {
 
     public PlayerEventListener(GameManager gameManager) {
         this.gameManager = gameManager;
+    }
+
+    @EventHandler
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Player)) {
+            return;
+        }
+
+        event.setCancelled(true);
+
+        Player player = (Player)event.getDamager();
+
+        ItemStack heldItem = player.getEquipment().getItem(EquipmentSlot.HAND);
+        CustomItem customItem = gameManager.getItemManager().getItem(heldItem);
+
+        if (customItem != null) {
+            customItem.onClickEntity(ClickType.LEFT, player, event.getEntity());
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        Player player = event.getPlayer();
+
+        ItemStack heldItem = player.getEquipment().getItem(EquipmentSlot.HAND);
+        CustomItem customItem = gameManager.getItemManager().getItem(heldItem);
+
+        if (customItem != null) {
+            customItem.onClickEntity(ClickType.RIGHT, player, event.getRightClicked());
+        }
     }
 
     @EventHandler
@@ -37,18 +71,14 @@ public class PlayerEventListener implements Listener {
         Action action = event.getAction();
 
         ItemStack heldItem = player.getEquipment().getItem(EquipmentSlot.HAND);
+        CustomItem customItem = gameManager.getItemManager().getItem(heldItem);
 
-        if (heldItem != null) {
-            CustomItem customItem = gameManager.getItemManager().getItem(heldItem);
-
-            if (customItem != null) {
-                if (action == Action.LEFT_CLICK_AIR) {
-                    customItem.onClick(ClickType.LEFT, player, event);
-                } else if (action == Action.RIGHT_CLICK_AIR) {
-                    customItem.onClick(ClickType.RIGHT, player, event);
-                }
+        if (customItem != null) {
+            if (action == Action.LEFT_CLICK_AIR) {
+                customItem.onClick(ClickType.LEFT, player);
+            } else if (action == Action.RIGHT_CLICK_AIR) {
+                customItem.onClick(ClickType.RIGHT, player);
             }
-
         }
 
         if (action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK) {
@@ -68,7 +98,7 @@ public class PlayerEventListener implements Listener {
         PlayerManager playerManager = gameManager.getPlayerManager();
         boolean receivedRole = false;
 
-        if (!receivedRole && gamePhase == GamePhaseType.LOBBY || gamePhase == GamePhaseType.STARTING) {
+        if (gamePhase == GamePhaseType.LOBBY || gamePhase == GamePhaseType.STARTING) {
             playerManager.setRole(player, new LobbyRole(gameManager, player));
             receivedRole = true;
         }
@@ -76,6 +106,10 @@ public class PlayerEventListener implements Listener {
         //i.e. the game is still going on
         if (!receivedRole && gamePhase != GamePhaseType.CLEAN_UP) {
             playerManager.setRole(player, new SpectatorRole(gameManager, player));
+        }
+
+        if (gamePhase == GamePhaseType.STARTING) {
+            gameManager.setPhase(new LobbyPhase(gameManager));
         }
 
         if (!playerManager.hostExists()) {
@@ -86,6 +120,7 @@ public class PlayerEventListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
+        GamePhaseType gamePhase = gameManager.getCurrentPhase().getPhaseType();
         PlayerManager playerManager = gameManager.getPlayerManager();
         Role role = playerManager.getRole(player);
 
@@ -94,9 +129,22 @@ public class PlayerEventListener implements Listener {
         }
 
         if (role != null) {
-            //Recheck win conditions if game going on
-
             playerManager.removeRole(player);
+
+            if (role instanceof LobbyRole || role instanceof SpectatorRole) {
+                return;
+            }
+
+            //TODO: Recheck win conditions
         }
+
+        if (gamePhase == GamePhaseType.STARTING) {
+            gameManager.setPhase(new LobbyPhase(gameManager));
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        event.setCancelled(true);
     }
 }

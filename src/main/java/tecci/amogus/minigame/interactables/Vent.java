@@ -41,7 +41,7 @@ public class Vent extends Interactable {
         playersInside.add(player.getUniqueId());
     }
 
-    public void removePlayer(Player player) {}
+    public void removePlayer(Player player) { playersInside.remove(player.getUniqueId()); }
 
     @Override
     public void interact(Player player) {

@@ -1,8 +1,12 @@
 package tecci.amogus.minigame.phases;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.managers.MapManager.MapId;
+import tecci.amogus.managers.PlayerManager;
 import tecci.amogus.minigame.GamePhase;
+import tecci.amogus.minigame.roles.LobbyRole;
 
 public class CleanUpPhase extends GamePhase {
     public CleanUpPhase(GameManager gameManager) {
@@ -20,6 +24,14 @@ public class CleanUpPhase extends GamePhase {
     @Override
     public void onStart() {
         gameManager.getMapManager().changeMap(MapId.LOBBY);
+
+        PlayerManager playerManager = gameManager.getPlayerManager();
+        playerManager.clearRoles();
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            playerManager.setRole(player, new LobbyRole(gameManager, player));
+        }
+
         gameManager.setPhase(new LobbyPhase(gameManager));
     }
 

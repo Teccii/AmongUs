@@ -1,10 +1,12 @@
 package tecci.amogus.minigame.roles;
 
 import org.bukkit.entity.Player;
+import tecci.amogus.items.StartItem;
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.Interactable;
 import tecci.amogus.minigame.Role;
 import tecci.amogus.minigame.WinCondition;
+import tecci.amogus.minigame.interactables.OptionsBook;
 
 public class LobbyRole extends Role {
     public LobbyRole(GameManager gameManager, Player player) {
@@ -15,14 +17,20 @@ public class LobbyRole extends Role {
     public WinCondition getWinCondition() { return null; }
 
     @Override
+    public void setRoleItems() {
+        if (gameManager.getPlayerManager().isHost(player)) {
+            roleItems.put(4, new StartItem(gameManager));
+        }
+    }
+
+    @Override
     public boolean canInteract(Interactable interactable) {
-        return true;
-        //TODO
+        return false;
     }
 
     @Override
     public boolean canInteractWithPlayer(Player target) {
         return false;
-        //TODO
+        //TODO ?
     }
 }

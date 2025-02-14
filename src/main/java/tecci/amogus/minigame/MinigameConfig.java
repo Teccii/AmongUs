@@ -1,5 +1,7 @@
 package tecci.amogus.minigame;
 
+import tecci.amogus.managers.MapManager;
+
 public class MinigameConfig {
     public enum TaskBarUpdates {
         ALWAYS,
@@ -15,6 +17,8 @@ public class MinigameConfig {
             };
         }
     }
+
+    private MapManager.MapId selectedMap;
 
     private int impostorCount = 2;
     private int impostorKillCooldown = 7; //2.5x + 7.5
@@ -32,6 +36,15 @@ public class MinigameConfig {
     private int longTaskCount = 1;
     private int shortTaskCount = 4;
     private boolean visualTasks = false;
+
+    public MapManager.MapId getSelectedMap() {
+        return selectedMap;
+    }
+
+    public MinigameConfig setSelectedMap(MapManager.MapId selectedMap) {
+        this.selectedMap = selectedMap;
+        return this;
+    }
 
     public int getImpostorCount() { return impostorCount; }
     public MinigameConfig setImpostorCount(int value) {

@@ -15,6 +15,11 @@ public class JesterRole extends Role {
     public WinCondition getWinCondition() { return WinCondition.JESTER; }
 
     @Override
+    public void setRoleItems() {
+        //TODO
+    }
+
+    @Override
     public boolean canInteract(Interactable interactable) {
         return false;
         //TODO

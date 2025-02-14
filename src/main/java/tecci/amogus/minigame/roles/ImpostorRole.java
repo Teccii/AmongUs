@@ -15,6 +15,11 @@ public class ImpostorRole extends Role {
     public WinCondition getWinCondition() { return WinCondition.IMPOSTOR; }
 
     @Override
+    public void setRoleItems() {
+        //TODO
+    }
+
+    @Override
     public boolean canInteract(Interactable interactable) {
         return false;
         //TODO

@@ -17,9 +17,7 @@ public class LobbyPhase extends GamePhase {
     }
 
     @Override
-    public void onStart() {
-        gameManager.setPhase(new ActivePhase(gameManager));
-    }
+    public void onStart() { }
 
     @Override
     public void onEnd() { }
