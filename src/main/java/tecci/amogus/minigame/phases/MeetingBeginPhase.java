@@ -1,11 +1,34 @@
 package tecci.amogus.minigame.phases;
 
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import tecci.amogus.items.CustomItem;
+import tecci.amogus.items.VoteItem;
 import tecci.amogus.managers.GameManager;
+import tecci.amogus.managers.ItemManager;
 import tecci.amogus.minigame.GamePhase;
+import tecci.amogus.minigame.MeetingReason;
+import tecci.amogus.minigame.roles.CrewmateRole;
+import tecci.amogus.minigame.roles.ImpostorRole;
+import tecci.amogus.minigame.roles.JesterRole;
+import tecci.amogus.runnables.MeetingBeginTimerRunnable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MeetingBeginPhase extends GamePhase {
-    public MeetingBeginPhase(GameManager gameManager) {
+    private final MeetingBeginTimerRunnable task;
+    private final MeetingReason reason;
+
+    public MeetingBeginPhase(GameManager gameManager, MeetingReason reason) {
         super(gameManager);
+
+        this.task = new MeetingBeginTimerRunnable(gameManager);
+        this.reason = reason;
     }
 
     @Override
@@ -17,8 +40,32 @@ public class MeetingBeginPhase extends GamePhase {
     }
 
     @Override
-    public void onStart() { }
+    public void onStart() {
+        ItemManager itemManager = gameManager.getItemManager();
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            String title = new TextComponent(ChatColor.RED + reason.toString()).toLegacyText();
+
+            player.sendTitle(title, null, 10, 50, 10);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 6, 1, false, false));
+
+            Map<Integer, CustomItem> meetingLoadout = new HashMap<>();
+            meetingLoadout.put(4, new VoteItem(gameManager));
+
+            itemManager.setLoadout(player, meetingLoadout);
+        }
+
+        gameManager.getPlayerManager().teleportAllRadial(gameManager.getMapManager().getCurrentMap().getSpawnLocation(), 5.0);
+
+        task.runTaskTimer(gameManager.getPlugin(), 0L, 20L);
+    }
 
     @Override
-    public void onEnd() { }
+    public void onEnd() {
+        task.cancel();
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.removePotionEffect(PotionEffectType.BLINDNESS);
+        }
+    }
 }

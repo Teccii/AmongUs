@@ -9,14 +9,10 @@ public abstract class TaskInteractable extends GuiInteractable {
     }
 
     public abstract TaskType getTaskType();
-    public abstract TaskCategory getTaskLength();
+    public abstract TaskCategory[] getTaskCategories();
     public abstract Task createTask();
 
     public void progressTask(Task task) {
-        if (task instanceof MultiPartTask multiPartTask) {
-            multiPartTask.progressTask();
-        } else {
-            task.submitTask();
-        }
+        task.submitTask();
     }
 }

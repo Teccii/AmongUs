@@ -5,10 +5,10 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import tecci.amogus.gui.EnumItem;
-import tecci.amogus.gui.NumberItem;
-import tecci.amogus.gui.OptionsBookTabItem;
-import tecci.amogus.gui.ToggleItem;
+import tecci.amogus.gui.EnumElement;
+import tecci.amogus.gui.NumberElement;
+import tecci.amogus.gui.OptionsBookTabElement;
+import tecci.amogus.gui.ToggleElement;
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.GuiInteractable;
 import tecci.amogus.minigame.MinigameConfig;
@@ -52,9 +52,9 @@ public class OptionsBook extends GuiInteractable {
                         .addAllItemFlags()
                         .setDisplayName(new ComponentBuilder("Impostor Wallhacks").color(ChatColor.WHITE).italic(false).build())
                 ))
-                .addIngredient('1', new NumberItem(config::setImpostorCount, Object::toString, 1, 3, config.getImpostorCount()))
-                .addIngredient('2', new NumberItem(config::setImpostorKillCooldown, value -> String.valueOf(value * 2.5 + 7.5), 1, 21, config.getImpostorKillCooldown()))
-                .addIngredient('3', new ToggleItem(config::setImpostorWallhacks, config.getImpostorWallhacks()))
+                .addIngredient('1', new NumberElement(config::setImpostorCount, Object::toString, 1, 3, config.getImpostorCount()))
+                .addIngredient('2', new NumberElement(config::setImpostorKillCooldown, value -> String.valueOf(value * 2.5 + 7.5), 1, 21, config.getImpostorKillCooldown()))
+                .addIngredient('3', new ToggleElement(config::setImpostorWallhacks, config.getImpostorWallhacks()))
                 .build();
 
         Gui meetingsTab = Gui.normal()
@@ -89,12 +89,12 @@ public class OptionsBook extends GuiInteractable {
                         .addAllItemFlags()
                         .setDisplayName(new ComponentBuilder("Confirm Ejects").color(ChatColor.WHITE).italic(false).build())
                 ))
-                .addIngredient('1', new NumberItem(config::setEmergencyMeetings, Object::toString, 0, 9, config.getEmergencyMeetings()))
-                .addIngredient('2', new NumberItem(config::setEmergencyCooldown, value -> String.valueOf((value * 5.0)), 0, 12, config.getEmergencyCooldown()))
-                .addIngredient('3', new NumberItem(config::setDiscussionTime, value -> String.valueOf(value * 15.0), 0, 8, config.getDiscussionTime()))
-                .addIngredient('4', new NumberItem(config::setVotingTime, value -> String.valueOf(value * 15.0), 0, 8, config.getVotingTime()))
-                .addIngredient('5', new ToggleItem(config::setAnonymousVotes, config.getAnonymousVotes()))
-                .addIngredient('6', new ToggleItem(config::setConfirmEjects, config.getConfirmEjects()))
+                .addIngredient('1', new NumberElement(config::setEmergencyMeetings, Object::toString, 0, 9, config.getEmergencyMeetings()))
+                .addIngredient('2', new NumberElement(config::setEmergencyCooldown, value -> String.valueOf((value * 5.0)), 0, 12, config.getEmergencyCooldown()))
+                .addIngredient('3', new NumberElement(config::setDiscussionTime, value -> String.valueOf(value * 15.0), 0, 8, config.getDiscussionTime()))
+                .addIngredient('4', new NumberElement(config::setVotingTime, value -> String.valueOf(value * 15.0), 0, 8, config.getVotingTime()))
+                .addIngredient('5', new ToggleElement(config::setAnonymousVotes, config.getAnonymousVotes()))
+                .addIngredient('6', new ToggleElement(config::setConfirmEjects, config.getConfirmEjects()))
                 .build();
 
         Gui tasksTab = Gui.normal()
@@ -125,16 +125,31 @@ public class OptionsBook extends GuiInteractable {
                         .addAllItemFlags()
                         .setDisplayName(new ComponentBuilder("Visual Tasks").color(ChatColor.WHITE).italic(false).build())
                 ))
-                .addIngredient('1', new EnumItem<>(config::setTaskBarUpdates, TaskBarUpdates::toString, config.getTaskBarUpdates()))
-                .addIngredient('2', new NumberItem(config::setCommonTaskCount, Object::toString, 0, 2, config.getCommonTaskCount()))
-                .addIngredient('3', new NumberItem(config::setLongTaskCount, Object::toString, 0, 2, config.getLongTaskCount()))
-                .addIngredient('4', new NumberItem(config::setShortTaskCount, Object::toString, 0, 5, config.getShortTaskCount()))
-                .addIngredient('5', new ToggleItem(config::setVisualTasks, config.getVisualTasks()))
+                .addIngredient('1', new EnumElement<>(config::setTaskBarUpdates, TaskBarUpdates::toString, config.getTaskBarUpdates()))
+                .addIngredient('2', new NumberElement(config::setCommonTaskCount, Object::toString, 0, 2, config.getCommonTaskCount()))
+                .addIngredient('3', new NumberElement(config::setLongTaskCount, Object::toString, 0, 2, config.getLongTaskCount()))
+                .addIngredient('4', new NumberElement(config::setShortTaskCount, Object::toString, 0, 5, config.getShortTaskCount()))
+                .addIngredient('5', new ToggleElement(config::setVisualTasks, config.getVisualTasks()))
+                .build();
+
+        Gui otherRolesTab = Gui.normal()
+                .setStructure(
+                        ". . . . . . . . .",
+                        ". . A 1 . . . . .",
+                        ". . . . . . . . .",
+                        ". . . . . . . . .",
+                        ". . . . . . . . ."
+                )
+                .addIngredient('A', new SimpleItem(new ItemBuilder(Material.NAUTILUS_SHELL)
+                        .addAllItemFlags()
+                        .setDisplayName(new ComponentBuilder("Jester Count").color(ChatColor.WHITE).italic(false).build())
+                ))
+                .addIngredient('1', new NumberElement(config::setJesterCount, Object::toString, 0, 2, config.getJesterCount()))
                 .build();
 
         return TabGui.normal()
                 .setStructure(
-                        ". . . A B C . . .",
+                        ". . A B . C D . .",
                         "x x x x x x x x x",
                         "x x x x x x x x x",
                         "x x x x x x x x x",
@@ -142,10 +157,11 @@ public class OptionsBook extends GuiInteractable {
                         "x x x x x x x x x"
                 )
                 .addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL)
-                .addIngredient('A', new OptionsBookTabItem(0))
-                .addIngredient('B', new OptionsBookTabItem(1))
-                .addIngredient('C', new OptionsBookTabItem(2))
-                .setTabs(List.of(impostorsTab, meetingsTab, tasksTab))
+                .addIngredient('A', new OptionsBookTabElement(0))
+                .addIngredient('B', new OptionsBookTabElement(1))
+                .addIngredient('C', new OptionsBookTabElement(2))
+                .addIngredient('D', new OptionsBookTabElement(3))
+                .setTabs(List.of(impostorsTab, meetingsTab, tasksTab, otherRolesTab))
                 .build();
     }
 

@@ -16,6 +16,7 @@ public class GameManager {
     //Other Managers
     private final ItemManager itemManager;
     private final MapManager mapManager;
+    private final MeetingManager meetingManager;
     private final GlowingManager glowingManager;
     private final PlayerManager playerManager;
     private final ProtocolManager protocolManager;
@@ -26,6 +27,7 @@ public class GameManager {
 
         itemManager = new ItemManager(this);
         mapManager = new MapManager(this);
+        meetingManager = new MeetingManager(this);
         glowingManager = new GlowingManager(this);
         playerManager = new PlayerManager(this);
         protocolManager = ProtocolLibrary.getProtocolManager();
@@ -44,6 +46,7 @@ public class GameManager {
 
     public ItemManager getItemManager() { return itemManager; }
     public MapManager getMapManager() { return mapManager; }
+    public MeetingManager getMeetingManager() { return meetingManager; }
     public GlowingManager getGlowingManager() { return glowingManager; }
     public PlayerManager getPlayerManager() { return playerManager; }
     public ProtocolManager getProtocolManager() { return protocolManager; }

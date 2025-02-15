@@ -11,10 +11,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import tecci.amogus.items.CustomItem;
 import tecci.amogus.managers.GameManager;
+import tecci.amogus.managers.MeetingManager;
 import tecci.amogus.managers.PlayerManager;
 import tecci.amogus.minigame.GamePhase.GamePhaseType;
 import tecci.amogus.minigame.Interactable;
@@ -140,6 +142,19 @@ public class PlayerEventListener implements Listener {
 
         if (gamePhase == GamePhaseType.STARTING) {
             gameManager.setPhase(new LobbyPhase(gameManager));
+        }
+
+        MeetingManager meetingManager = gameManager.getMeetingManager();
+        if (meetingManager.isMeetingActive()) {
+            meetingManager.removeVote(player);
+            meetingManager.removeVotesFor(player);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if (gameManager.getMeetingManager().isMeetingActive()) {
+            event.setCancelled(true);
         }
     }
 

@@ -1,4 +1,4 @@
-package tecci.amogus.minigame;
+package tecci.amogus.runnables;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -9,21 +9,25 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import tecci.amogus.managers.GameManager;
+import tecci.amogus.minigame.GamePhase;
 import tecci.amogus.minigame.phases.IntroPhase;
 
-public class GameStartCountdownTask extends BukkitRunnable {
+public class StartCountdownRunnable extends BukkitRunnable {
     private final GameManager gameManager;
     private int timer = 5;
 
-    public GameStartCountdownTask(GameManager gameManager) {
+    public StartCountdownRunnable(GameManager gameManager) {
         this.gameManager = gameManager;
     }
 
     @Override
     public void run() {
-        timer--;
+        if (gameManager.getCurrentPhase().getPhaseType() == GamePhase.GamePhaseType.LOBBY) {
+            this.cancel();
+            return;
+        }
 
-        if (timer >= 0) {
+        if (timer > 0) {
             BaseComponent[] component = new ComponentBuilder()
                     .append(new TextComponent(ChatColor.GREEN + "Starting in " + timer))
                     .create();
@@ -31,6 +35,8 @@ public class GameStartCountdownTask extends BukkitRunnable {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
             }
+
+            timer--;
 
             return;
         }

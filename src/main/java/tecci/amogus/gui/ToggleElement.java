@@ -13,11 +13,11 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 import java.util.function.Consumer;
 
-public class ToggleItem extends AbstractItem {
+public class ToggleElement extends AbstractItem {
     private final Consumer<Boolean> toggleHandler;
     private boolean state;
 
-    public ToggleItem(Consumer<Boolean> toggleHandler, boolean defaultState) {
+    public ToggleElement(Consumer<Boolean> toggleHandler, boolean defaultState) {
         this.toggleHandler = toggleHandler;
         state = defaultState;
     }

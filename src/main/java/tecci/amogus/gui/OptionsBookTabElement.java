@@ -8,10 +8,10 @@ import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.controlitem.TabItem;
 
-public class OptionsBookTabItem extends TabItem {
+public class OptionsBookTabElement extends TabItem {
     private final int tabIndex;
 
-    public OptionsBookTabItem(int tabIndex) {
+    public OptionsBookTabElement(int tabIndex) {
         super(tabIndex);
         this.tabIndex = tabIndex;
     }
@@ -30,6 +30,8 @@ public class OptionsBookTabItem extends TabItem {
             case 2:
                 itemBuilder.setDisplayName(new ComponentBuilder("Tasks").color(ChatColor.WHITE).italic(false).build());
                 break;
+            case 3:
+                itemBuilder.setDisplayName(new ComponentBuilder("Other Roles").color(ChatColor.WHITE).italic(false).build());
         }
 
         return itemBuilder;

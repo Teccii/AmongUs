@@ -1,16 +1,17 @@
-package tecci.amogus.items;
+package tecci.amogus.runnables;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
+import tecci.amogus.items.CustomItem;
 import tecci.amogus.managers.ItemManager;
 
-public class ItemTickTask extends BukkitRunnable {
+public class ItemTickRunnable extends BukkitRunnable {
     private final ItemManager itemManager;
 
-    public ItemTickTask(ItemManager itemManager) {
+    public ItemTickRunnable(ItemManager itemManager) {
         this.itemManager = itemManager;
     }
 

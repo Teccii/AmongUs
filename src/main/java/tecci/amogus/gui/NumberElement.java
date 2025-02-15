@@ -11,56 +11,48 @@ import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 
-import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class EnumItem<E extends Enum<E>> extends AbstractItem {
-    private final Consumer<E> changeHandler;
-    private final Function<E, String> valueDisplayHandler;
-    private final E[] values;
-    private final int len;
-    private int index;
+public class NumberElement extends AbstractItem {
+    private final Consumer<Integer> changeHandler;
+    private final Function<Integer, String> valueDisplayHandler;
+    private final int minValue;
+    private final int maxValue;
+    private int value;
 
-    public EnumItem(Consumer<E> changeHandler, Function<E, String> valueDisplayHandler, E defaultState) {
+    public NumberElement(Consumer<Integer> changeHandler, Function<Integer, String> valueDisplayHandler, int minValue, int maxValue, int defaultState) {
         this.changeHandler = changeHandler;
         this.valueDisplayHandler = valueDisplayHandler;
-
-        values = defaultState.getDeclaringClass().getEnumConstants();
-        len = values.length;
-        Arrays.sort(values);
-
-        index = Arrays.binarySearch(values, defaultState);
-    }
-
-    public E getVariant() {
-        return values[index];
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+        value = defaultState;
     }
 
     @Override
     public ItemProvider getItemProvider() {
         return new ItemBuilder(Material.NAUTILUS_SHELL)
-                .addAllItemFlags()
-                .setDisplayName(new ComponentBuilder(valueDisplayHandler.apply(getVariant())).color(ChatColor.WHITE).italic(false).build());
+            .addAllItemFlags()
+            .setDisplayName(new ComponentBuilder(valueDisplayHandler.apply(value)).color(ChatColor.WHITE).italic(false).build());
     }
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         if (clickType == ClickType.LEFT) {
-            if (index == len - 1) {
-                index = 0;
+            if (value == maxValue) {
+                value = minValue;
             } else {
-                index++;
+                value++;
             }
         } else if (clickType == ClickType.RIGHT) {
-            if (index == 0) {
-                index = len - 1;
+            if (value == minValue) {
+                value = maxValue;
             } else {
-                index--;
+                value--;
             }
         }
 
-        changeHandler.accept(getVariant());
+        changeHandler.accept(value);
         notifyWindows();
     }
 }

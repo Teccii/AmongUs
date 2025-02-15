@@ -1,7 +1,5 @@
 package tecci.amogus.managers;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -11,7 +9,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import tecci.amogus.items.CustomItem;
-import tecci.amogus.items.ItemTickTask;
+import tecci.amogus.runnables.ItemTickRunnable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,12 +21,12 @@ public class ItemManager {
 
     private final GameManager gameManager;
     private final Map<UUID, CustomItem> registeredItems = new HashMap<>();
-    private final ItemTickTask tickTask;
+    private final ItemTickRunnable tickTask;
 
     public ItemManager(GameManager gameManager) {
         this.gameManager = gameManager;
 
-        tickTask = new ItemTickTask(this);
+        tickTask = new ItemTickRunnable(this);
         tickTask.runTaskTimer(gameManager.getPlugin(), 0, 1);
     }
 

@@ -39,6 +39,12 @@ public abstract class Role {
 
     public void setDead(boolean isDead) {
         this.isDead = isDead;
+
+        if (isDead) {
+            gameManager.getMeetingManager().addNewDeadBody(player);
+        } else {
+            gameManager.getMeetingManager().removeDeadBody(player);
+        }
     }
 
     public Task getTask(TaskInteractable interactable) {

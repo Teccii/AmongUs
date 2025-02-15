@@ -2,8 +2,7 @@ package tecci.amogus.managers;
 
 import org.bukkit.Location;
 import tecci.amogus.minigame.*;
-import tecci.amogus.minigame.interactables.FlickyInteractable;
-import tecci.amogus.minigame.interactables.OptionsBook;
+import tecci.amogus.minigame.interactables.*;
 
 import java.io.File;
 import java.util.*;
@@ -30,15 +29,10 @@ public class MapManager {
             HashSet<Interactable> interactables = new HashSet<>();
 
             interactables.add(new OptionsBook(gameManager, new Location(world, 4.0, 65.0, 0.0)));
+
             return interactables;
         }, world -> {
-            Map<TaskCategory, List<TaskInteractable>> taskInteractables = new HashMap<>();
-
-            List<TaskInteractable> commonTasks = new ArrayList<>();
-            commonTasks.add(new FlickyInteractable(gameManager, new Location(world, 4.0, 65.0, 2.0)));
-
-            taskInteractables.put(TaskCategory.COMMON, commonTasks);
-
+            List<TaskInteractable> taskInteractables = new ArrayList<>();
 
             return taskInteractables;
         }));
@@ -48,7 +42,7 @@ public class MapManager {
 
             return interactables;
         }, world -> {
-            Map<TaskCategory, List<TaskInteractable>> taskInteractables = new HashMap<>();
+            List<TaskInteractable> taskInteractables = new ArrayList<>();
 
             return taskInteractables;
         }));

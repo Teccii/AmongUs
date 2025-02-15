@@ -8,19 +8,18 @@ import tecci.amogus.util.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 public class GameMap {
     private final File sourceWorldFolder;
     private final Function<World, Set<Interactable>> nonTaskInteractableProvider;
-    private final Function<World,  Map<TaskCategory, List<TaskInteractable>>> taskInteractableProvider;
-    private double spawnX, spawnY, spawnZ;
+    private final Function<World,  List<TaskInteractable>> taskInteractableProvider;
+    private final double spawnX, spawnY, spawnZ;
     private File activeWorldFolder;
     private Set<Interactable> activeNonTaskInteractables;
     private Map<TaskCategory, List<TaskInteractable>> activeTaskInteractables;
+    private List<TaskType> commonTaskTypes;
     private World world;
 
     public GameMap(
@@ -31,7 +30,7 @@ public class GameMap {
             double spawnY,
             double spawnZ,
             Function<World, Set<Interactable>> nonTaskInteractableProvider,
-            Function<World, Map<TaskCategory, List<TaskInteractable>>> taskInteractableProvider
+            Function<World, List<TaskInteractable>> taskInteractableProvider
     ) {
         this.sourceWorldFolder = new File(worldFolder, worldName);
         this.nonTaskInteractableProvider = nonTaskInteractableProvider;
@@ -67,11 +66,27 @@ public class GameMap {
 
         if (world != null) {
             this.activeNonTaskInteractables = nonTaskInteractableProvider.apply(world);
-            this.activeTaskInteractables = taskInteractableProvider.apply(world);
+            populateTaskMap();
             world.setAutoSave(false);
         }
 
         return isLoaded();
+    }
+
+    private void populateTaskMap() {
+        List<TaskInteractable> taskInteractables = taskInteractableProvider.apply(world);
+        List<TaskType> commonTaskTypes = new ArrayList<>();
+        activeTaskInteractables = new HashMap<>();
+
+        for (TaskInteractable taskInteractable : taskInteractables) {
+            for (TaskCategory category : taskInteractable.getTaskCategories()) {
+                activeTaskInteractables.computeIfAbsent(category, k -> new ArrayList<>()).add(taskInteractable);
+
+                if (category == TaskCategory.COMMON && !commonTaskTypes.contains(taskInteractable.getTaskType())) {
+                    commonTaskTypes.add(taskInteractable.getTaskType());
+                }
+            }
+        }
     }
 
     public void unload() {
@@ -103,6 +118,7 @@ public class GameMap {
         return activeNonTaskInteractables;
     }
     public Map<TaskCategory, List<TaskInteractable>> getActiveTaskInteractables() { return activeTaskInteractables; }
+    public List<TaskType> getCommonTaskTypes() { return commonTaskTypes; }
 
     public World getWorld() {
         return world;

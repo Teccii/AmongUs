@@ -2,15 +2,15 @@ package tecci.amogus.minigame.phases;
 
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.GamePhase;
-import tecci.amogus.minigame.GameStartCountdownTask;
+import tecci.amogus.runnables.StartCountdownRunnable;
 
 public class StartingPhase extends GamePhase {
-    private final GameStartCountdownTask task;
+    private final StartCountdownRunnable task;
 
     public StartingPhase(GameManager gameManager) {
         super(gameManager);
 
-        task = new GameStartCountdownTask(gameManager);
+        task = new StartCountdownRunnable(gameManager);
     }
 
     @Override
