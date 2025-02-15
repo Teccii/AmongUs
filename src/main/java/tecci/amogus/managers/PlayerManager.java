@@ -55,10 +55,6 @@ public class PlayerManager {
 
     public boolean hostExists() { return hostExists; }
 
-    public void distributeRoles() {
-
-    }
-
     //teleports people into random positions inside a region
     public void teleportAllRandom(double minX, double maxX, double y, double minZ, double maxZ) {
         for (Player player : Bukkit.getOnlinePlayers()) {

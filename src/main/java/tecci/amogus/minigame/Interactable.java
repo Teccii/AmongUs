@@ -17,7 +17,5 @@ public abstract class Interactable {
         return location;
     }
 
-    // may need something like "interactable type"
-
     public abstract void interact(Player player);
 }

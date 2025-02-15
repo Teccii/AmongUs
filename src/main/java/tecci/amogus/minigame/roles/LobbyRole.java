@@ -25,7 +25,7 @@ public class LobbyRole extends Role {
 
     @Override
     public boolean canInteract(Interactable interactable) {
-        return false;
+        return true;
     }
 
     @Override

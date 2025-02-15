@@ -1,14 +1,12 @@
 package tecci.amogus.managers;
 
 import org.bukkit.Location;
-import tecci.amogus.GameMap;
-import tecci.amogus.minigame.Interactable;
+import tecci.amogus.minigame.*;
+import tecci.amogus.minigame.interactables.FlickyInteractable;
 import tecci.amogus.minigame.interactables.OptionsBook;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 public class MapManager {
     public enum MapId {
@@ -28,18 +26,31 @@ public class MapManager {
             mapsFolder.mkdirs();
         }
 
-        maps.put(MapId.LOBBY, new GameMap(mapsFolder, "Lobby", false, world -> {
+        maps.put(MapId.LOBBY, new GameMap(mapsFolder, "Lobby", false, 0.0, 65.0, 0.0, world -> {
             HashSet<Interactable> interactables = new HashSet<>();
 
             interactables.add(new OptionsBook(gameManager, new Location(world, 4.0, 65.0, 0.0)));
-
             return interactables;
+        }, world -> {
+            Map<TaskCategory, List<TaskInteractable>> taskInteractables = new HashMap<>();
+
+            List<TaskInteractable> commonTasks = new ArrayList<>();
+            commonTasks.add(new FlickyInteractable(gameManager, new Location(world, 4.0, 65.0, 2.0)));
+
+            taskInteractables.put(TaskCategory.COMMON, commonTasks);
+
+
+            return taskInteractables;
         }));
 
-        maps.put(MapId.SKELD, new GameMap(mapsFolder, "Skeld", false, set -> {
+        maps.put(MapId.SKELD, new GameMap(mapsFolder, "Skeld", false, 0, 0, 0, world -> {
             HashSet<Interactable> interactables = new HashSet<>();
 
             return interactables;
+        }, world -> {
+            Map<TaskCategory, List<TaskInteractable>> taskInteractables = new HashMap<>();
+
+            return taskInteractables;
         }));
     }
 
@@ -50,7 +61,7 @@ public class MapManager {
             return null;
         }
 
-        for (Interactable interactable : map.getActiveInteractables()) {
+        for (Interactable interactable : map.getActiveNonTaskInteractables()) {
             if (interactable.getLocation().equals(location)) {
                 return interactable;
             }

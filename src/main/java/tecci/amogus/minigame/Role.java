@@ -4,12 +4,15 @@ import org.bukkit.entity.Player;
 import tecci.amogus.items.CustomItem;
 import tecci.amogus.managers.GameManager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class Role {
     protected final GameManager gameManager;
     protected final Map<Integer, CustomItem> roleItems = new HashMap<>();
+    protected final List<Task> tasks = new ArrayList<>();
     protected final Player player;
     protected int meetingsLeft;
     protected boolean isDead;
@@ -36,6 +39,24 @@ public abstract class Role {
 
     public void setDead(boolean isDead) {
         this.isDead = isDead;
+    }
+
+    public Task getTask(TaskInteractable interactable) {
+        for (Task task : tasks) {
+            if (task.getInteractable().equals(interactable)) {
+                return task;
+            }
+        }
+
+        return null;
+    }
+
+    public void addTask(Task task) {
+        tasks.add(task);
+    }
+
+    public void clearTasks() {
+        tasks.clear();
     }
 
     public abstract WinCondition getWinCondition();

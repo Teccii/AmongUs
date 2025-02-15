@@ -1,28 +1,44 @@
-package tecci.amogus;
+package tecci.amogus.minigame;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import tecci.amogus.minigame.Interactable;
 import tecci.amogus.util.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
 public class GameMap {
     private final File sourceWorldFolder;
-    private final Function<World, Set<Interactable>> interactableProvider;
+    private final Function<World, Set<Interactable>> nonTaskInteractableProvider;
+    private final Function<World,  Map<TaskCategory, List<TaskInteractable>>> taskInteractableProvider;
     private double spawnX, spawnY, spawnZ;
     private File activeWorldFolder;
-    private Set<Interactable> activeInteractables;
+    private Set<Interactable> activeNonTaskInteractables;
+    private Map<TaskCategory, List<TaskInteractable>> activeTaskInteractables;
     private World world;
 
-    public GameMap(File worldFolder, String worldName, boolean loadOnInit, Function<World, Set<Interactable>> interactableProvider) {
+    public GameMap(
+            File worldFolder,
+            String worldName,
+            boolean loadOnInit,
+            double spawnX,
+            double spawnY,
+            double spawnZ,
+            Function<World, Set<Interactable>> nonTaskInteractableProvider,
+            Function<World, Map<TaskCategory, List<TaskInteractable>>> taskInteractableProvider
+    ) {
         this.sourceWorldFolder = new File(worldFolder, worldName);
-        this.interactableProvider = interactableProvider;
+        this.nonTaskInteractableProvider = nonTaskInteractableProvider;
+        this.taskInteractableProvider = taskInteractableProvider;
+        this.spawnX = spawnX;
+        this.spawnY = spawnY;
+        this.spawnZ = spawnZ;
 
         if (loadOnInit) {
             this.load();
@@ -50,7 +66,8 @@ public class GameMap {
         this.world = Bukkit.createWorld(new WorldCreator(activeWorldFolder.getName()));
 
         if (world != null) {
-            this.activeInteractables = interactableProvider.apply(world);
+            this.activeNonTaskInteractables = nonTaskInteractableProvider.apply(world);
+            this.activeTaskInteractables = taskInteractableProvider.apply(world);
             world.setAutoSave(false);
         }
 
@@ -68,7 +85,8 @@ public class GameMap {
 
         world = null;
         activeWorldFolder = null;
-        activeInteractables = null;
+        activeNonTaskInteractables = null;
+        activeTaskInteractables = null;
     }
 
     public boolean restoreFromSource() {
@@ -81,9 +99,10 @@ public class GameMap {
         return getWorld() != null;
     }
 
-    public Set<Interactable> getActiveInteractables() {
-        return activeInteractables;
+    public Set<Interactable> getActiveNonTaskInteractables() {
+        return activeNonTaskInteractables;
     }
+    public Map<TaskCategory, List<TaskInteractable>> getActiveTaskInteractables() { return activeTaskInteractables; }
 
     public World getWorld() {
         return world;

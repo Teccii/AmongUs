@@ -5,14 +5,13 @@ import org.bukkit.entity.Player;
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.managers.MapManager;
 import tecci.amogus.managers.PlayerManager;
-import tecci.amogus.minigame.GamePhase;
+import tecci.amogus.minigame.*;
 import tecci.amogus.minigame.roles.CrewmateRole;
 import tecci.amogus.minigame.roles.ImpostorRole;
 import tecci.amogus.minigame.roles.JesterRole;
+import tecci.amogus.util.RandomUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class IntroPhase extends GamePhase {
     public IntroPhase(GameManager gameManager) {
@@ -71,6 +70,31 @@ public class IntroPhase extends GamePhase {
         }
 
         //distribute tasks
+        int commonTaskCount = gameManager.getConfig().getCommonTaskCount();
+        int longTaskCount = gameManager.getConfig().getLongTaskCount();
+        int shortTaskCount = gameManager.getConfig().getShortTaskCount();
+
+        Map<TaskCategory, List<TaskInteractable>> taskInteractables = mapManager.getCurrentMap().getActiveTaskInteractables();
+        List<TaskInteractable> commonTasks = taskInteractables.get(TaskCategory.COMMON);
+        List<TaskInteractable> longTasks = taskInteractables.get(TaskCategory.LONG);
+        List<TaskInteractable> shortTasks = taskInteractables.get(TaskCategory.SHORT);
+
+        //if only one common task decide which one it is
+
+        //flip a coin if impostor
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            Role role = playerManager.getRole(player);
+            role.clearTasks();
+
+            for (int i = 0; i < longTaskCount; i++) {
+                role.addTask(longTasks.get(RandomUtil.rng.nextInt(longTasks.size())).createTask());
+            }
+
+            for (int i = 0; i < shortTaskCount; i++) {
+                role.addTask(shortTasks.get(RandomUtil.rng.nextInt(shortTasks.size())).createTask());
+            }
+        }
 
         //multi-second task: blindness, send title to players showing their roles
     }
