@@ -1,23 +1,20 @@
 package tecci.amogus.listeners;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import tecci.amogus.items.CustomItem;
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.managers.MeetingManager;
 import tecci.amogus.managers.PlayerManager;
+import tecci.amogus.minigame.DeathReason;
 import tecci.amogus.minigame.GamePhase.GamePhaseType;
 import tecci.amogus.minigame.Interactable;
 import tecci.amogus.minigame.Role;
@@ -98,9 +95,9 @@ public class PlayerEventListener implements Listener {
 
         GamePhaseType gamePhase = gameManager.getCurrentPhase().getPhaseType();
         PlayerManager playerManager = gameManager.getPlayerManager();
-        boolean receivedRole = false;
+        boolean receivedRole = playerManager.getRole(player) != null;
 
-        if (gamePhase == GamePhaseType.LOBBY || gamePhase == GamePhaseType.STARTING) {
+        if (!receivedRole && gamePhase == GamePhaseType.LOBBY || gamePhase == GamePhaseType.STARTING) {
             playerManager.setRole(player, new LobbyRole(gameManager, player));
             receivedRole = true;
         }
@@ -108,6 +105,7 @@ public class PlayerEventListener implements Listener {
         //i.e. the game is still going on
         if (!receivedRole && gamePhase != GamePhaseType.CLEAN_UP) {
             playerManager.setRole(player, new SpectatorRole(gameManager, player));
+            receivedRole = true;
         }
 
         if (gamePhase == GamePhaseType.STARTING) {
@@ -131,13 +129,15 @@ public class PlayerEventListener implements Listener {
         }
 
         if (role != null) {
-            playerManager.removeRole(player);
+            role.setDeathReason(DeathReason.DISCONNECTED);
+            role.setDead(true);
 
             if (role instanceof LobbyRole || role instanceof SpectatorRole) {
+                playerManager.removeRole(player);
                 return;
             }
 
-            //TODO: Recheck win conditions
+            gameManager.checkWinConditions();
         }
 
         if (gamePhase == GamePhaseType.STARTING) {

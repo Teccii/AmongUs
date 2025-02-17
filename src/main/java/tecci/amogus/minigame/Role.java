@@ -15,6 +15,7 @@ public abstract class Role {
     protected final List<Task> tasks = new ArrayList<>();
     protected final Player player;
     protected int meetingsLeft;
+    protected DeathReason deathReason;
     protected boolean isDead;
 
     public Role(GameManager gameManager, Player player) {
@@ -38,13 +39,27 @@ public abstract class Role {
     }
 
     public void setDead(boolean isDead) {
+        setDead(isDead, true);
+    }
+
+    public void setDead(boolean isDead, boolean updateMeetingManager) {
         this.isDead = isDead;
 
-        if (isDead) {
-            gameManager.getMeetingManager().addNewDeadBody(player);
-        } else {
-            gameManager.getMeetingManager().removeDeadBody(player);
+        if (updateMeetingManager) {
+            if (isDead) {
+                gameManager.getMeetingManager().addNewDeadBody(player);
+            } else {
+                gameManager.getMeetingManager().removeDeadBody(player);
+            }
         }
+    }
+
+    public DeathReason getDeathReason() {
+        return deathReason;
+    }
+
+    public void setDeathReason(DeathReason reason) {
+        this.deathReason = reason;
     }
 
     public Task getTask(TaskInteractable interactable) {
@@ -59,6 +74,16 @@ public abstract class Role {
 
     public void addTask(Task task) {
         tasks.add(task);
+    }
+
+    public boolean hasCompletedAllTasks() {
+        for (Task task : tasks) {
+            if (!task.isCompleted()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public void clearTasks() {

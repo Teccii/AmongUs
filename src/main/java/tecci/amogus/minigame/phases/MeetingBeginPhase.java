@@ -12,9 +12,6 @@ import tecci.amogus.managers.GameManager;
 import tecci.amogus.managers.ItemManager;
 import tecci.amogus.minigame.GamePhase;
 import tecci.amogus.minigame.MeetingReason;
-import tecci.amogus.minigame.roles.CrewmateRole;
-import tecci.amogus.minigame.roles.ImpostorRole;
-import tecci.amogus.minigame.roles.JesterRole;
 import tecci.amogus.runnables.MeetingBeginTimerRunnable;
 
 import java.util.HashMap;
@@ -22,12 +19,14 @@ import java.util.Map;
 
 public class MeetingBeginPhase extends GamePhase {
     private final MeetingBeginTimerRunnable task;
+    private final Player meetingHost;
     private final MeetingReason reason;
 
-    public MeetingBeginPhase(GameManager gameManager, MeetingReason reason) {
+    public MeetingBeginPhase(GameManager gameManager, Player meetingHost, MeetingReason reason) {
         super(gameManager);
 
         this.task = new MeetingBeginTimerRunnable(gameManager);
+        this.meetingHost = meetingHost;
         this.reason = reason;
     }
 
@@ -42,11 +41,12 @@ public class MeetingBeginPhase extends GamePhase {
     @Override
     public void onStart() {
         ItemManager itemManager = gameManager.getItemManager();
+        gameManager.getMeetingManager().setMeetingHost(meetingHost);
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             String title = new TextComponent(ChatColor.RED + reason.toString()).toLegacyText();
 
-            player.sendTitle(title, null, 10, 50, 10);
+            player.sendTitle(title, null, 10, 40, 10);
             player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 6, 1, false, false));
 
             Map<Integer, CustomItem> meetingLoadout = new HashMap<>();

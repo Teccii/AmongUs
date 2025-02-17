@@ -1,6 +1,5 @@
 package tecci.amogus.minigame;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public class VoteResult {
@@ -11,9 +10,9 @@ public class VoteResult {
     }
 
     private final ResultType resultType;
-    private final Optional<UUID> ejectedPlayer;
+    private final UUID ejectedPlayer;
 
-    public VoteResult(ResultType resultType, Optional<UUID> ejectedPlayer) {
+    public VoteResult(ResultType resultType, UUID ejectedPlayer) {
         this.resultType = resultType;
         this.ejectedPlayer = ejectedPlayer;
     }
@@ -22,7 +21,7 @@ public class VoteResult {
         return resultType;
     }
 
-    public Optional<UUID> getEjectedPlayer() {
+    public UUID getEjectedPlayer() {
         return ejectedPlayer;
     }
 }

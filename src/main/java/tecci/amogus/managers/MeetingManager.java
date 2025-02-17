@@ -8,8 +8,10 @@ import java.util.*;
 
 public class MeetingManager {
     private final GameManager gameManager;
-    private final Map<UUID, Optional<UUID>> playerVotes = new HashMap<>();
+    private final Map<UUID, UUID> playerVotes = new HashMap<>();
     private final Set<UUID> newDeadBodies = new HashSet<>();
+    private UUID meetingHost = null;
+    private boolean canVote = false;
 
     public MeetingManager(GameManager gameManager) {
         this.gameManager = gameManager;
@@ -21,18 +23,13 @@ public class MeetingManager {
         return currentPhase == GamePhaseType.DISCUSSION || currentPhase == GamePhaseType.VOTING;
     }
 
-    public boolean canVote() {
-        return gameManager.getCurrentPhase().getPhaseType() == GamePhaseType.VOTING;
-    }
-
     public VoteResult getVoteResult() {
         Map<UUID, Integer> voteTally = new HashMap<>();
         int skipVotes = 0;
 
-        for (Optional<UUID> vote : playerVotes.values()) {
-            if (vote.isPresent()) {
-                UUID votedFor = vote.get();
-                voteTally.put(votedFor, voteTally.getOrDefault(votedFor, 0) + 1);
+        for (UUID vote : playerVotes.values()) {
+            if (vote != null) {
+                voteTally.put(vote, voteTally.getOrDefault(vote, 0) + 1);
             } else {
                 skipVotes++;
             }
@@ -55,21 +52,21 @@ public class MeetingManager {
         }
 
         if (isTie || highestVoteCount == skipVotes) {
-            return new VoteResult(VoteResult.ResultType.TIE, Optional.empty());
+            return new VoteResult(VoteResult.ResultType.TIE, null);
         }
 
         if (skipVotes > highestVoteCount) {
-            return new VoteResult(VoteResult.ResultType.SKIPPED, Optional.empty());
+            return new VoteResult(VoteResult.ResultType.SKIPPED, null);
         }
 
-        return new VoteResult(VoteResult.ResultType.EJECTED, Optional.of(mostVotedPlayer));
+        return new VoteResult(VoteResult.ResultType.EJECTED, mostVotedPlayer);
     }
 
     public boolean hasVoted(Player player) {
         return playerVotes.containsKey(player.getUniqueId());
     }
 
-    public void addVote(Player player, Optional<UUID> vote) {
+    public void addVote(Player player, UUID vote) {
         playerVotes.put(player.getUniqueId(), vote);
     }
 
@@ -81,10 +78,10 @@ public class MeetingManager {
     public void removeVotesFor(Player player) {
         UUID uuid = player.getUniqueId();
 
-        playerVotes.entrySet().removeIf(entry -> entry.getValue().isPresent() && entry.getValue().get().equals(uuid));
+        playerVotes.entrySet().removeIf(entry -> entry.getValue().equals(uuid));
     }
 
-    public Optional<UUID> getVote(Player player) {
+    public UUID getVote(Player player) {
         return playerVotes.get(player.getUniqueId());
     }
 
@@ -92,10 +89,10 @@ public class MeetingManager {
         Set<UUID> votes = new HashSet<>();
         UUID uuid = player.getUniqueId();
 
-        for (Map.Entry<UUID, Optional<UUID>> entry : playerVotes.entrySet()) {
-            Optional<UUID> vote = entry.getValue();
+        for (Map.Entry<UUID, UUID> entry : playerVotes.entrySet()) {
+            UUID vote = entry.getValue();
 
-            if (vote.isPresent() && vote.get().equals(uuid)) {
+            if (vote.equals(uuid)) {
                 votes.add(entry.getKey());
             }
         }
@@ -105,6 +102,22 @@ public class MeetingManager {
 
     public void clearAllVotes() {
         playerVotes.clear();
+    }
+
+    public void setCanVote(boolean canVote) {
+        this.canVote = canVote;
+    }
+
+    public boolean canVote() {
+        return canVote;
+    }
+
+    public void setMeetingHost(Player player) {
+        meetingHost = player.getUniqueId();
+    }
+
+    public UUID getMeetingHost() {
+        return meetingHost;
     }
 
     public Set<UUID> getNewDeadBodies() {

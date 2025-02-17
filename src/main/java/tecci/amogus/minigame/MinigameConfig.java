@@ -37,7 +37,8 @@ public class MinigameConfig {
     private int shortTaskCount = 4;
     private boolean visualTasks = false;
 
-    private int jesterCount = 1;
+    private boolean jesterEnabled = true;
+    private int jesterChance = 10;
 
     public MapManager.MapId getSelectedMap() {
         return selectedMap;
@@ -136,9 +137,15 @@ public class MinigameConfig {
         return this;
     }
 
-    public int getJesterCount() { return jesterCount; }
-    public MinigameConfig setJesterCount(int value) {
-        this.jesterCount = clamp(value, 0, 1);
+    public boolean getJesterEnabled() { return jesterEnabled; }
+    public MinigameConfig setJesterEnabled(boolean value) {
+        this.jesterEnabled = value;
+        return this;
+    }
+
+    public int getJesterChance() { return jesterChance; }
+    public MinigameConfig setJesterChance(int value) {
+        this.jesterChance = clamp(value, 0, 10);
         return this;
     }
 

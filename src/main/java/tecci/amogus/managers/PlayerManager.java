@@ -7,14 +7,13 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import tecci.amogus.minigame.Role;
-import tecci.amogus.minigame.roles.CrewmateRole;
-import tecci.amogus.minigame.roles.ImpostorRole;
-import tecci.amogus.minigame.roles.JesterRole;
 import tecci.amogus.util.LocationUtil;
 import tecci.amogus.util.RandomUtil;
 
-import javax.swing.plaf.nimbus.NimbusStyle;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class PlayerManager {
     private final GameManager gameManager;
@@ -28,6 +27,8 @@ public class PlayerManager {
 
         tryFindNewHost();
     }
+
+    public Map<UUID, Role> getRoleMap() { return playerRoles; }
 
     public Role getRole(Player player) {
         return playerRoles.get(player.getUniqueId());

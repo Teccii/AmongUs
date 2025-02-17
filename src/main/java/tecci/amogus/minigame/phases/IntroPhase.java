@@ -14,7 +14,10 @@ import tecci.amogus.minigame.roles.*;
 import tecci.amogus.runnables.IntroTimerRunnable;
 import tecci.amogus.util.RandomUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class IntroPhase extends GamePhase {
     private final IntroTimerRunnable task;
@@ -44,12 +47,20 @@ public class IntroPhase extends GamePhase {
 
         Player[] playerList = new Player[Bukkit.getOnlinePlayers().size()];
         playerList = Bukkit.getOnlinePlayers().toArray(playerList);
+        int playerCount = playerList.length;
 
         //distribute roles
         playerManager.clearRoles();
 
         int impostorsLeft = config.getImpostorCount();
-        int jestersLeft = config.getJesterCount();
+
+        if (impostorsLeft == 3 && playerCount < 9) {
+            impostorsLeft--;
+        }
+
+        if (impostorsLeft == 2 && playerCount < 7) {
+            impostorsLeft--;
+        }
 
         while (impostorsLeft > 0) {
             Player player = playerList[RandomUtil.rng.nextInt(playerList.length)];
@@ -60,6 +71,8 @@ public class IntroPhase extends GamePhase {
             }
         }
 
+        int jestersLeft = (config.getJesterEnabled() && RandomUtil.probability((double)config.getJesterChance() / 10.0)) ? 1 : 0;
+
         while (jestersLeft > 0) {
             Player player = playerList[RandomUtil.rng.nextInt(playerList.length)];
 
@@ -69,6 +82,7 @@ public class IntroPhase extends GamePhase {
             }
         }
 
+        String title = new TextComponent(ChatColor.WHITE + "Your role is").toLegacyText();
         for (Player player : playerList) {
             Role role = playerManager.getRole(player);
 
@@ -78,7 +92,6 @@ public class IntroPhase extends GamePhase {
             }
 
             //give them blindness and show their role while we're here ig
-            String title = new TextComponent(ChatColor.WHITE + "Your role is").toLegacyText();
             String subtitle = new TextComponent(switch (role) {
                 case CrewmateRole ignored -> ChatColor.AQUA + "Crewmate";
                 case ImpostorRole ignored -> ChatColor.RED + "Impostor";

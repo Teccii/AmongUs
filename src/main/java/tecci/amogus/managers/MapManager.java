@@ -1,8 +1,10 @@
 package tecci.amogus.managers;
 
 import org.bukkit.Location;
-import tecci.amogus.minigame.*;
-import tecci.amogus.minigame.interactables.*;
+import tecci.amogus.minigame.GameMap;
+import tecci.amogus.minigame.Interactable;
+import tecci.amogus.minigame.TaskInteractable;
+import tecci.amogus.minigame.interactables.OptionsBook;
 
 import java.io.File;
 import java.util.*;

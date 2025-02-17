@@ -6,7 +6,6 @@ import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.Interactable;
 import tecci.amogus.minigame.Role;
 import tecci.amogus.minigame.WinCondition;
-import tecci.amogus.minigame.interactables.OptionsBook;
 
 public class LobbyRole extends Role {
     public LobbyRole(GameManager gameManager, Player player) {

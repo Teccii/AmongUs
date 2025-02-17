@@ -4,28 +4,25 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.GamePhase;
 import tecci.amogus.minigame.phases.DiscussionPhase;
 
 import java.util.stream.Collectors;
 
-public class MeetingBeginTimerRunnable extends BukkitRunnable {
-    private final GameManager gameManager;
-    private int timer = 6;
-
+public class MeetingBeginTimerRunnable extends PhaseTimerRunnable {
     public MeetingBeginTimerRunnable(GameManager gameManager) {
-        this.gameManager = gameManager;
+        super(gameManager);
+        timer = 6;
     }
 
     @Override
-    public void run() {
-        if (gameManager.getCurrentPhase().getPhaseType() == GamePhase.GamePhaseType.OVER) {
-            this.cancel();
-            return;
-        }
+    protected GamePhase.GamePhaseType getPhaseType() {
+        return GamePhase.GamePhaseType.MEETING_BEGIN;
+    }
 
+    @Override
+    public void timerTick() {
         if (timer == 3) {
             String deadBodyList = gameManager.getMeetingManager().getNewDeadBodies().stream()
                     .map(uuid -> Bukkit.getPlayer(uuid).getName())
@@ -35,14 +32,13 @@ public class MeetingBeginTimerRunnable extends BukkitRunnable {
                 String title = new TextComponent(ChatColor.RED + "Dead Bodies").toLegacyText();
                 String subtitle = new TextComponent(ChatColor.WHITE + deadBodyList).toLegacyText();
 
-                player.sendTitle(title, subtitle, 10, 50, 10);
+                player.sendTitle(title, subtitle, 10, 40, 10);
             }
         }
+    }
 
-        timer--;
-
-        if (timer <= 0) {
-            gameManager.setPhase(new DiscussionPhase(gameManager));
-        }
+    @Override
+    public void timerEnd() {
+        gameManager.setPhase(new DiscussionPhase(gameManager));
     }
 }

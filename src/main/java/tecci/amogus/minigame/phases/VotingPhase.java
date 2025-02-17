@@ -18,11 +18,12 @@ public class VotingPhase extends GamePhase {
 
     @Override
     public boolean isValidTransition(GamePhaseType nextPhase) {
-        return nextPhase == GamePhaseType.MEETING_DISMISSED || nextPhase == GamePhaseType.EJECTING || nextPhase == GamePhaseType.OVER;
+        return nextPhase == GamePhaseType.EJECTING || nextPhase == GamePhaseType.OVER;
     }
 
     @Override
     public void onStart() {
+        gameManager.getMeetingManager().setCanVote(true);
         task.runTaskTimer(gameManager.getPlugin(), 0, 20);
     }
 

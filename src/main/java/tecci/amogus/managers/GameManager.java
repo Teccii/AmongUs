@@ -2,11 +2,15 @@ package tecci.amogus.managers;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import org.bukkit.Bukkit;
 import tecci.amogus.AmongUsPlugin;
 import tecci.amogus.adapters.HeldItemAdapter;
-import tecci.amogus.minigame.GamePhase;
-import tecci.amogus.minigame.MinigameConfig;
+import tecci.amogus.minigame.*;
 import tecci.amogus.minigame.phases.CleanUpPhase;
+import tecci.amogus.minigame.phases.OverPhase;
+import tecci.amogus.minigame.roles.*;
+
+import java.util.*;
 
 public class GameManager {
     private final AmongUsPlugin plugin;
@@ -63,6 +67,47 @@ public class GameManager {
 
         currentPhase = nextPhase;
         currentPhase.onStart();
+    }
+
+    public boolean checkWinConditions() {
+        Collection<Role> roles = playerManager.getRoleMap().values();
+
+        //Jester Win Condition
+        for (JesterRole jester : roles.stream().filter(JesterRole.class::isInstance).map(JesterRole.class::cast).toList()) {
+            if (jester.isDead() && jester.getDeathReason() == DeathReason.EJECTED) {
+                submitWin(WinCondition.JESTER);
+                return true;
+            }
+        }
+
+        //Impostor Win Condition
+        //might need to be redone if something like jackal gets added
+        long impostorCount = roles.stream().filter(ImpostorRole.class::isInstance).count();
+        long nonImpostorCount = roles.stream().filter(r -> !(r instanceof ImpostorRole)).count();
+
+        if (impostorCount >= nonImpostorCount) {
+            submitWin(WinCondition.IMPOSTOR);
+            return true;
+        }
+
+        //Crewmate Win Conditions
+        long aliveImpostorCount = roles.stream().filter(r -> r instanceof ImpostorRole && !r.isDead()).count();
+
+        if (aliveImpostorCount == 0) {
+            submitWin(WinCondition.CREWMATE);
+            return true;
+        }
+
+        if (roles.stream().filter(CrewmateRole.class::isInstance).allMatch(Role::hasCompletedAllTasks)) {
+            submitWin(WinCondition.CREWMATE);
+            return true;
+        }
+
+        return false;
+    }
+
+    private void submitWin(WinCondition winCondition) {
+        setPhase(new OverPhase(this, winCondition));
     }
 
     public void onDisable() {

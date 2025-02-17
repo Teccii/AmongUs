@@ -22,6 +22,11 @@ public class SpectatorRole extends Role {
     }
 
     @Override
+    public boolean isDead() {
+        return true;
+    }
+
+    @Override
     public boolean canInteract(Interactable interactable) {
         return false;
         //TODO

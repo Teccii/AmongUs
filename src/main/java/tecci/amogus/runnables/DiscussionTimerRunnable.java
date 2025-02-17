@@ -1,33 +1,28 @@
 package tecci.amogus.runnables;
 
-import org.bukkit.scheduler.BukkitRunnable;
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.GamePhase;
 import tecci.amogus.minigame.phases.VotingPhase;
 
-public class DiscussionTimerRunnable extends BukkitRunnable {
-    private final GameManager gameManager;
-    private int timer;
-
+public class DiscussionTimerRunnable extends PhaseTimerRunnable {
     public DiscussionTimerRunnable(GameManager gameManager) {
-        this.gameManager = gameManager;
-        this.timer = (int)gameManager.getConfig().getDiscussionTimeSeconds();
+        super(gameManager);
+        timer = (int)gameManager.getConfig().getDiscussionTimeSeconds();
     }
 
     @Override
-    public void run() {
-        timer--;
+    protected GamePhase.GamePhaseType getPhaseType() {
+        return GamePhase.GamePhaseType.DISCUSSION;
+    }
 
-        if (gameManager.getCurrentPhase().getPhaseType() == GamePhase.GamePhaseType.OVER) {
-            this.cancel();
-            return;
-        }
+    @Override
+    public void timerTick() {
+        //show the time somewhere
+    }
 
-        if (timer > 0) {
-            //show it somewhere
-            return;
-        }
-
+    @Override
+    public void timerEnd() {
         gameManager.setPhase(new VotingPhase(gameManager));
     }
 }
+

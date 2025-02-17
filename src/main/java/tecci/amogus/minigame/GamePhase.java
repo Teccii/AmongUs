@@ -10,8 +10,7 @@ public abstract class GamePhase {
         ACTIVE,             //ACTIVE ->             MEETING_BEGIN | OVER
         MEETING_BEGIN,      //MEETING_BEGIN ->      DISCUSSION | OVER
         DISCUSSION,         //DISCUSSION ->         VOTING | OVER
-        VOTING,             //VOTING ->             MEETING_DISMISSED | EJECTING | OVER
-        MEETING_DISMISSED,  //MEETING_DISMISSED ->  ACTIVE | OVER
+        VOTING,             //VOTING ->             EJECTING | OVER
         EJECTING,           //EJECTING ->           ACTIVE | OVER
         OVER,               //OVER ->               CLEAN_UP
         CLEAN_UP,           //CLEAN_UP ->           LOBBY

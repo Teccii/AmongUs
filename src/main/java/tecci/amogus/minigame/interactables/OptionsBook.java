@@ -136,15 +136,20 @@ public class OptionsBook extends GuiInteractable {
                 .setStructure(
                         ". . . . . . . . .",
                         ". . A 1 . . . . .",
-                        ". . . . . . . . .",
+                        ". . B 2 . . . . .",
                         ". . . . . . . . .",
                         ". . . . . . . . ."
                 )
                 .addIngredient('A', new SimpleItem(new ItemBuilder(Material.NAUTILUS_SHELL)
                         .addAllItemFlags()
-                        .setDisplayName(new ComponentBuilder("Jester Count").color(ChatColor.WHITE).italic(false).build())
+                        .setDisplayName(new ComponentBuilder("Jester Enabled").color(ChatColor.WHITE).italic(false).build())
                 ))
-                .addIngredient('1', new NumberElement(config::setJesterCount, Object::toString, 0, 2, config.getJesterCount()))
+                .addIngredient('B', new SimpleItem(new ItemBuilder(Material.NAUTILUS_SHELL)
+                        .addAllItemFlags()
+                        .setDisplayName(new ComponentBuilder("Jester Chance").color(ChatColor.WHITE).italic(false).build())
+                ))
+                .addIngredient('1', new ToggleElement(config::setJesterEnabled, config.getJesterEnabled()))
+                .addIngredient('2', new NumberElement(config::setJesterChance, v -> String.format("%d%%", v * 10), 1, 10, config.getJesterChance()))
                 .build();
 
         return TabGui.normal()

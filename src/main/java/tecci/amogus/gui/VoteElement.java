@@ -14,8 +14,6 @@ import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 
-import java.util.Optional;
-
 public class VoteElement extends AbstractItem {
     private final GameManager gameManager;
     private final Player target;
@@ -40,7 +38,7 @@ public class VoteElement extends AbstractItem {
         }
 
         if (meetingManager.isMeetingActive() && meetingManager.canVote() && !meetingManager.hasVoted(player)) {
-            meetingManager.addVote(player, Optional.of(target.getUniqueId()));
+            meetingManager.addVote(player, target.getUniqueId());
         }
     }
 }

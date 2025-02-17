@@ -1,33 +1,35 @@
 package tecci.amogus.runnables;
 
-import org.bukkit.scheduler.BukkitRunnable;
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.GamePhase;
+import tecci.amogus.minigame.phases.EjectingPhase;
 
-public class VotingTimerRunnable extends BukkitRunnable {
-    private final GameManager gameManager;
-    private int timer;
-
+public class VotingTimerRunnable extends PhaseTimerRunnable {
     public VotingTimerRunnable(GameManager gameManager) {
-        this.gameManager = gameManager;
-        this.timer = (int)gameManager.getConfig().getVotingTimeSeconds();
+        super(gameManager);
+        timer = (int)gameManager.getConfig().getVotingTimeSeconds() + 3; //3 seconds to show players vote result
     }
 
     @Override
-    public void run() {
-        timer--;
+    protected GamePhase.GamePhaseType getPhaseType() {
+        return GamePhase.GamePhaseType.VOTING;
+    }
 
-        if (gameManager.getCurrentPhase().getPhaseType() != GamePhase.GamePhaseType.VOTING) {
-            this.cancel();
-            return;
+    @Override
+    public void timerTick() {
+        if (timer > 3) {
+            //show the timer somewhere (subtract 3 seconds from it)
+        } else {
+            if (gameManager.getMeetingManager().canVote()) {
+                gameManager.getMeetingManager().setCanVote(false);
+            }
+
+            //show all the votes
         }
+    }
 
-        if (timer > 0) {
-            //show it somewhere
-            return;
-        }
-
-        //TODO: either meeting_dismissed, ejecting or over
-        //TODO: meeting can end early if everyone has already voted
+    @Override
+    public void timerEnd() {
+        gameManager.setPhase(new EjectingPhase(gameManager, gameManager.getMeetingManager().getVoteResult()));
     }
 }
