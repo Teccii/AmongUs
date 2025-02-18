@@ -24,7 +24,7 @@ public class EjectingPhase extends GamePhase {
 
     @Override
     public boolean isValidTransition(GamePhaseType nextPhase) {
-        return nextPhase == GamePhaseType.ACTIVE || nextPhase == GamePhaseType.OVER;
+        return nextPhase == GamePhaseType.ACTIVE || nextPhase == GamePhaseType.GAME_OVER;
     }
 
     @Override

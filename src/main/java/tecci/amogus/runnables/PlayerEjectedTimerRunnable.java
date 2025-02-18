@@ -60,8 +60,7 @@ public class PlayerEjectedTimerRunnable extends PhaseTimerRunnable {
 
             PlayerManager playerManager = gameManager.getPlayerManager();
             Role role = playerManager.getRole(ejectedPlayer);
-            role.setDead(true, false);
-            role.setDeathReason(DeathReason.EJECTED);
+            role.setDead(true, DeathReason.EJECTED, false);
 
             if (confirmEject) {
                 boolean wasImposter = role instanceof ImpostorRole;
@@ -77,7 +76,7 @@ public class PlayerEjectedTimerRunnable extends PhaseTimerRunnable {
 
     @Override
     public void timerEnd() {
-        if (gameManager.checkWinConditions()) {
+        if (gameManager.checkVictory()) {
             return;
         }
 

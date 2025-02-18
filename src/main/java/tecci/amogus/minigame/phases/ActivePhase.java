@@ -13,7 +13,7 @@ public class ActivePhase extends GamePhase {
 
     @Override
     public boolean isValidTransition(GamePhaseType nextPhase) {
-        return nextPhase == GamePhaseType.MEETING_BEGIN || nextPhase == GamePhaseType.OVER;
+        return nextPhase == GamePhaseType.MEETING_BEGIN || nextPhase == GamePhaseType.GAME_OVER;
     }
 
     @Override

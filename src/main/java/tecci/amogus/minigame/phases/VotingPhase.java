@@ -18,7 +18,7 @@ public class VotingPhase extends GamePhase {
 
     @Override
     public boolean isValidTransition(GamePhaseType nextPhase) {
-        return nextPhase == GamePhaseType.EJECTING || nextPhase == GamePhaseType.OVER;
+        return nextPhase == GamePhaseType.EJECTING || nextPhase == GamePhaseType.GAME_OVER;
     }
 
     @Override

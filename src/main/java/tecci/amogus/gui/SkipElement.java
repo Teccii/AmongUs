@@ -8,8 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.managers.MeetingManager;
 import tecci.amogus.minigame.Role;
-import tecci.amogus.minigame.roles.LobbyRole;
-import tecci.amogus.minigame.roles.SpectatorRole;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
@@ -31,7 +29,7 @@ public class SkipElement extends AbstractItem {
         MeetingManager meetingManager = gameManager.getMeetingManager();
         Role role = gameManager.getPlayerManager().getRole(player);
 
-        if (role == null || role.isDead() || role instanceof LobbyRole || role instanceof SpectatorRole) {
+        if (role == null || role.isDead() || role.isNonPlayingRole()) {
             return;
         }
 

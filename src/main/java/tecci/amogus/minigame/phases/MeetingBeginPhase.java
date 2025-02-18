@@ -35,7 +35,7 @@ public class MeetingBeginPhase extends GamePhase {
 
     @Override
     public boolean isValidTransition(GamePhaseType nextPhase) {
-        return nextPhase == GamePhaseType.DISCUSSION || nextPhase == GamePhaseType.OVER;
+        return nextPhase == GamePhaseType.DISCUSSION || nextPhase == GamePhaseType.GAME_OVER;
     }
 
     @Override

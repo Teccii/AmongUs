@@ -1,6 +1,5 @@
 package tecci.amogus;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import tecci.amogus.listeners.PlayerEventListener;
 import tecci.amogus.managers.GameManager;

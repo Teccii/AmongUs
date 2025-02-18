@@ -38,12 +38,13 @@ public abstract class Role {
         return isDead;
     }
 
-    public void setDead(boolean isDead) {
-        setDead(isDead, true);
+    public void setDead(boolean isDead, DeathReason deathReason) {
+        setDead(isDead, deathReason, true);
     }
 
-    public void setDead(boolean isDead, boolean updateMeetingManager) {
+    public void setDead(boolean isDead, DeathReason deathReason, boolean updateMeetingManager) {
         this.isDead = isDead;
+        this.deathReason = deathReason;
 
         if (updateMeetingManager) {
             if (isDead) {
@@ -56,10 +57,6 @@ public abstract class Role {
 
     public DeathReason getDeathReason() {
         return deathReason;
-    }
-
-    public void setDeathReason(DeathReason reason) {
-        this.deathReason = reason;
     }
 
     public Task getTask(TaskInteractable interactable) {
@@ -91,6 +88,9 @@ public abstract class Role {
     }
 
     public abstract WinCondition getWinCondition();
+    public abstract boolean requiresRecheck();
+    public abstract boolean checkVictory();
+    public abstract boolean isNonPlayingRole();
     public abstract void setRoleItems();
 
     public abstract boolean canInteract(Interactable interactable);

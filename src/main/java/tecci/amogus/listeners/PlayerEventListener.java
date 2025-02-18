@@ -1,6 +1,5 @@
 package tecci.amogus.listeners;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -93,6 +92,8 @@ public class PlayerEventListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
+        player.teleport(gameManager.getMapManager().getCurrentMap().getSpawnLocation());
+
         GamePhaseType gamePhase = gameManager.getCurrentPhase().getPhaseType();
         PlayerManager playerManager = gameManager.getPlayerManager();
         boolean receivedRole = playerManager.getRole(player) != null;
@@ -129,15 +130,16 @@ public class PlayerEventListener implements Listener {
         }
 
         if (role != null) {
-            role.setDeathReason(DeathReason.DISCONNECTED);
-            role.setDead(true);
+            role.setDead(true, DeathReason.DISCONNECTED);
 
-            if (role instanceof LobbyRole || role instanceof SpectatorRole) {
+            if (role.isNonPlayingRole()) {
                 playerManager.removeRole(player);
                 return;
             }
 
-            gameManager.checkWinConditions();
+            if (gameManager.checkVictory()) {
+                return;
+            }
         }
 
         if (gamePhase == GamePhaseType.STARTING) {

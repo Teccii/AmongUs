@@ -3,14 +3,20 @@ package tecci.amogus.managers;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import tecci.amogus.AmongUsPlugin;
 import tecci.amogus.adapters.HeldItemAdapter;
-import tecci.amogus.minigame.*;
+import tecci.amogus.minigame.GamePhase;
+import tecci.amogus.minigame.MinigameConfig;
+import tecci.amogus.minigame.Role;
+import tecci.amogus.minigame.WinCondition;
 import tecci.amogus.minigame.phases.CleanUpPhase;
-import tecci.amogus.minigame.phases.OverPhase;
-import tecci.amogus.minigame.roles.*;
+import tecci.amogus.minigame.phases.GameOverPhase;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class GameManager {
     private final AmongUsPlugin plugin;
@@ -58,6 +64,7 @@ public class GameManager {
     public GamePhase getCurrentPhase() { return currentPhase; }
     public void setPhase(GamePhase nextPhase) {
         if (currentPhase != null && !currentPhase.isValidTransition(nextPhase.getPhaseType())) {
+            Bukkit.getLogger().warning(String.format("%s -> %s is not a valid phase transition.", currentPhase.getPhaseType(), nextPhase.getPhaseType()));
             return;
         }
 
@@ -69,45 +76,32 @@ public class GameManager {
         currentPhase.onStart();
     }
 
-    public boolean checkWinConditions() {
-        Collection<Role> roles = playerManager.getRoleMap().values();
+    public boolean checkVictory() {
+        Set<WinCondition> winConditions = new HashSet<>();
+        List<Player> winners = new ArrayList<>();
 
-        //Jester Win Condition
-        for (JesterRole jester : roles.stream().filter(JesterRole.class::isInstance).map(JesterRole.class::cast).toList()) {
-            if (jester.isDead() && jester.getDeathReason() == DeathReason.EJECTED) {
-                submitWin(WinCondition.JESTER);
-                return true;
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            Role role = playerManager.getRole(player);
+
+            if (role != null && !role.isNonPlayingRole()) {
+                WinCondition winCondition = role.getWinCondition();
+
+                if ((!winConditions.contains(winCondition) || role.requiresRecheck()) && role.checkVictory()) {
+                    winConditions.add(winCondition);
+                    winners.add(player);
+                } else if (winConditions.contains(winCondition) && !role.requiresRecheck()) {
+                    winners.add(player);
+                }
             }
         }
 
-        //Impostor Win Condition
-        //might need to be redone if something like jackal gets added
-        long impostorCount = roles.stream().filter(ImpostorRole.class::isInstance).count();
-        long nonImpostorCount = roles.stream().filter(r -> !(r instanceof ImpostorRole)).count();
+        boolean isEmpty = winners.isEmpty();
 
-        if (impostorCount >= nonImpostorCount) {
-            submitWin(WinCondition.IMPOSTOR);
-            return true;
+        if (!isEmpty) {
+            setPhase(new GameOverPhase(this, winConditions, winners));
         }
 
-        //Crewmate Win Conditions
-        long aliveImpostorCount = roles.stream().filter(r -> r instanceof ImpostorRole && !r.isDead()).count();
-
-        if (aliveImpostorCount == 0) {
-            submitWin(WinCondition.CREWMATE);
-            return true;
-        }
-
-        if (roles.stream().filter(CrewmateRole.class::isInstance).allMatch(Role::hasCompletedAllTasks)) {
-            submitWin(WinCondition.CREWMATE);
-            return true;
-        }
-
-        return false;
-    }
-
-    private void submitWin(WinCondition winCondition) {
-        setPhase(new OverPhase(this, winCondition));
+        return isEmpty;
     }
 
     public void onDisable() {

@@ -19,8 +19,7 @@ public class VoteItem extends GuiItem {
 
     @Override
     public Gui getGui(Player player) {
-        Player[] playerList = new Player[Bukkit.getOnlinePlayers().size()];
-        playerList = Bukkit.getOnlinePlayers().toArray(playerList);
+        Player[] playerList = Bukkit.getOnlinePlayers().toArray(new Player[0]);
         int playerCount = playerList.length;
 
         var builder = Gui.normal().addIngredient('S', new SkipElement(gameManager));

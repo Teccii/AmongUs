@@ -10,14 +10,15 @@ import tecci.amogus.managers.GameManager;
 import tecci.amogus.managers.MapManager;
 import tecci.amogus.managers.PlayerManager;
 import tecci.amogus.minigame.*;
-import tecci.amogus.minigame.roles.*;
+import tecci.amogus.minigame.roles.CrewmateRole;
+import tecci.amogus.minigame.roles.ImpostorRole;
+import tecci.amogus.minigame.roles.JesterRole;
 import tecci.amogus.runnables.IntroTimerRunnable;
 import tecci.amogus.util.RandomUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class IntroPhase extends GamePhase {
     private final IntroTimerRunnable task;
@@ -45,8 +46,7 @@ public class IntroPhase extends GamePhase {
         mapManager.changeMap(config.getSelectedMap());
         playerManager.teleportAllRadial(mapManager.getCurrentMap().getSpawnLocation(), 5.0);
 
-        Player[] playerList = new Player[Bukkit.getOnlinePlayers().size()];
-        playerList = Bukkit.getOnlinePlayers().toArray(playerList);
+        Player[] playerList = Bukkit.getOnlinePlayers().toArray(new Player[0]);
         int playerCount = playerList.length;
 
         //distribute roles
@@ -86,7 +86,7 @@ public class IntroPhase extends GamePhase {
         for (Player player : playerList) {
             Role role = playerManager.getRole(player);
 
-            if (role == null || role instanceof LobbyRole || role instanceof SpectatorRole) {
+            if (role == null || role.isNonPlayingRole()) {
                 role = new CrewmateRole(gameManager, player);
                 playerManager.setRole(player, role);
             }
@@ -124,7 +124,7 @@ public class IntroPhase extends GamePhase {
         for (Player player : playerList) {
             Role role = playerManager.getRole(player);
 
-            if (role == null || role instanceof LobbyRole || role instanceof SpectatorRole) {
+            if (role == null || role.isNonPlayingRole()) {
                 continue;
             }
 

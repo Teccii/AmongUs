@@ -18,8 +18,7 @@ import tecci.amogus.util.LocationUtil;
 import java.util.*;
 
 public class GlowingManager {
-    private GameManager gameManager;
-
+    private final GameManager gameManager;
     private final Map<UUID, GlowingSet<Location>> glowingBlocks = new HashMap<>();
     private final Map<UUID, GlowingSet<UUID>> glowingEntities = new HashMap<>();
 

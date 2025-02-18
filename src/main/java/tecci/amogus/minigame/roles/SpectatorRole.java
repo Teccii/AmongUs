@@ -12,18 +12,33 @@ public class SpectatorRole extends Role {
     }
 
     @Override
+    public boolean isDead() {
+        return true;
+    }
+
+    @Override
     public WinCondition getWinCondition() {
         return null;
     }
 
     @Override
-    public void setRoleItems() {
-        //TODO
+    public boolean checkVictory() {
+        return false;
     }
 
     @Override
-    public boolean isDead() {
+    public boolean requiresRecheck() {
+        return false;
+    }
+
+    @Override
+    public boolean isNonPlayingRole() {
         return true;
+    }
+
+    @Override
+    public void setRoleItems() {
+        //TODO
     }
 
     @Override
