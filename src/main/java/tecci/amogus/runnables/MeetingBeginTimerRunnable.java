@@ -5,6 +5,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import tecci.amogus.managers.GameManager;
+import tecci.amogus.minigame.Corpse;
 import tecci.amogus.minigame.GamePhase;
 import tecci.amogus.minigame.phases.DiscussionPhase;
 
@@ -24,8 +25,9 @@ public class MeetingBeginTimerRunnable extends PhaseTimerRunnable {
     @Override
     public void timerTick() {
         if (timer == 3) {
-            String deadBodyList = gameManager.getMeetingManager().getNewDeadBodies().stream()
-                    .map(uuid -> Bukkit.getPlayer(uuid).getName())
+            String deadBodyList = gameManager.getCorpseManager().getActiveCorpses()
+                    .stream()
+                    .map(Corpse::getName)
                     .collect(Collectors.joining(", "));
 
             for (Player player : Bukkit.getOnlinePlayers()) {

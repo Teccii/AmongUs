@@ -1,8 +1,14 @@
 package tecci.amogus.minigame;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import tecci.amogus.AmongUsPlugin;
 import tecci.amogus.items.CustomItem;
+import tecci.amogus.managers.CorpseManager;
 import tecci.amogus.managers.GameManager;
+import tecci.amogus.managers.PlayerManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,15 +48,41 @@ public abstract class Role {
         setDead(isDead, deathReason, true);
     }
 
-    public void setDead(boolean isDead, DeathReason deathReason, boolean updateMeetingManager) {
+    public void setDead(boolean isDead, DeathReason deathReason, boolean updateCorpseManager) {
         this.isDead = isDead;
         this.deathReason = deathReason;
 
-        if (updateMeetingManager) {
+        AmongUsPlugin plugin = gameManager.getPlugin();
+        PlayerManager playerManager = gameManager.getPlayerManager();
+
+        if (isDead) {
+            playerManager.getGhostTeam().addEntry(player.getName());
+            player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
+        } else {
+            playerManager.getAliveTeam().addEntry(player.getName());
+            player.removePotionEffect(PotionEffectType.INVISIBILITY);
+        }
+
+        for (Player otherPlayer : Bukkit.getOnlinePlayers()) {
+            if (otherPlayer.getUniqueId().equals(player.getUniqueId())) {
+                continue;
+            }
+
+            if (!otherPlayer.isDead()) {
+                if (isDead) {
+                    otherPlayer.hideEntity(plugin, player);
+                } else {
+                    otherPlayer.showEntity(plugin, player);
+                }
+            }
+        }
+
+        if (updateCorpseManager) {
+            CorpseManager corpseManager = gameManager.getCorpseManager();
             if (isDead) {
-                gameManager.getMeetingManager().addNewDeadBody(player);
+                corpseManager.addCorpse(player);
             } else {
-                gameManager.getMeetingManager().removeDeadBody(player);
+                corpseManager.removeCorpse(player);
             }
         }
     }
@@ -88,10 +120,14 @@ public abstract class Role {
     }
 
     public abstract WinCondition getWinCondition();
-    public abstract boolean requiresRecheck();
+    public abstract boolean isTeamRole();
     public abstract boolean checkVictory();
     public abstract boolean isNonPlayingRole();
+
     public abstract void setRoleItems();
+    public Map<Integer, CustomItem> getRoleItems() {
+        return roleItems;
+    }
 
     public abstract boolean canInteract(Interactable interactable);
 

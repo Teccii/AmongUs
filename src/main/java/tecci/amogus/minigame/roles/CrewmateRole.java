@@ -2,11 +2,15 @@ package tecci.amogus.minigame.roles;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import tecci.amogus.items.ReportItem;
+import tecci.amogus.items.TeleportItem;
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.managers.PlayerManager;
 import tecci.amogus.minigame.Interactable;
 import tecci.amogus.minigame.Role;
+import tecci.amogus.minigame.TaskInteractable;
 import tecci.amogus.minigame.WinCondition;
+import tecci.amogus.minigame.interactables.EmergencyButton;
 
 public class CrewmateRole extends Role {
     public CrewmateRole(GameManager gameManager, Player player) {
@@ -23,9 +27,8 @@ public class CrewmateRole extends Role {
         boolean tasksCompleted = true;
         boolean impostorsDead = true;
 
-        //task victory
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            Role role = playerManager.getRole(p);
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            Role role = playerManager.getRole(player);
 
             if (role instanceof CrewmateRole && !role.hasCompletedAllTasks()) {
                 tasksCompleted = false;
@@ -40,7 +43,7 @@ public class CrewmateRole extends Role {
     }
 
     @Override
-    public boolean requiresRecheck() {
+    public boolean isTeamRole() {
         return false;
     }
 
@@ -51,13 +54,20 @@ public class CrewmateRole extends Role {
 
     @Override
     public void setRoleItems() {
-        //TODO
+        if (isDead()) {
+            roleItems.put(0, new TeleportItem(gameManager));
+        } else {
+            roleItems.put(0, new ReportItem(gameManager));
+        }
     }
 
     @Override
     public boolean canInteract(Interactable interactable) {
-        return false;
-        //TODO
+        if (interactable instanceof TaskInteractable taskInteractable) {
+            return !gameManager.getMeetingManager().isMeetingActive() && getTask(taskInteractable) != null;
+        }
+
+        return interactable instanceof EmergencyButton;
     }
 
     @Override

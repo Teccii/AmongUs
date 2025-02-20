@@ -6,6 +6,10 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.Team.Option;
+import org.bukkit.scoreboard.Team.OptionStatus;
 import tecci.amogus.minigame.Role;
 import tecci.amogus.util.LocationUtil;
 import tecci.amogus.util.RandomUtil;
@@ -18,6 +22,8 @@ import java.util.UUID;
 public class PlayerManager {
     private final GameManager gameManager;
     private final Map<UUID, Role> playerRoles = new HashMap<>();
+    private final Team aliveTeam;
+    private final Team ghostTeam;
 
     private UUID hostId = null;
     private boolean hostExists = false;
@@ -25,10 +31,30 @@ public class PlayerManager {
     public PlayerManager(GameManager gameManager) {
         this.gameManager = gameManager;
 
+        Scoreboard scoreboard = gameManager.getScoreboard();
+
+        ghostTeam = scoreboard.registerNewTeam("Ghost");
+        ghostTeam.setDisplayName("Ghost");
+        ghostTeam.setCanSeeFriendlyInvisibles(true);
+        ghostTeam.setOption(Option.COLLISION_RULE, OptionStatus.NEVER);
+        ghostTeam.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
+
+        aliveTeam = scoreboard.registerNewTeam("Alive");
+        aliveTeam.setDisplayName("Alive");
+        aliveTeam.setCanSeeFriendlyInvisibles(false);
+        aliveTeam.setOption(Option.COLLISION_RULE, OptionStatus.NEVER);
+        aliveTeam.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
+
         tryFindNewHost();
     }
 
-    public Map<UUID, Role> getRoleMap() { return playerRoles; }
+    public Team getAliveTeam() {
+        return aliveTeam;
+    }
+
+    public Team getGhostTeam() {
+        return ghostTeam;
+    }
 
     public Role getRole(Player player) {
         return playerRoles.get(player.getUniqueId());

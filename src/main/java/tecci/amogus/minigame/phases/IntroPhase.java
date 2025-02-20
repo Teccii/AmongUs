@@ -132,8 +132,9 @@ public class IntroPhase extends GamePhase {
 
             List<TaskType> tasksAdded = new ArrayList<>(commonTaskCount + longTaskCount + shortTaskCount);
             boolean isCrewmate = role instanceof CrewmateRole;
+            int whileLoops = 0;
 
-            while (tasksAdded.size() < commonTaskCount) {
+            while (tasksAdded.size() < commonTaskCount && whileLoops < 100) {
                 TaskInteractable task = commonTasks.get(RandomUtil.rng.nextInt(commonTasks.size()));
                 TaskType taskType = task.getTaskType();
 
@@ -143,9 +144,12 @@ public class IntroPhase extends GamePhase {
                     tasksAdded.add(taskType);
                     role.addTask(task.createTask());
                 }
+
+                whileLoops++;
             }
 
-            while (tasksAdded.size() < commonTaskCount + longTaskCount) {
+            whileLoops = 0;
+            while (tasksAdded.size() < commonTaskCount + longTaskCount && whileLoops < 100) {
                 TaskInteractable task = longTasks.get(RandomUtil.rng.nextInt(longTasks.size()));
                 TaskType taskType = task.getTaskType();
 
@@ -153,9 +157,12 @@ public class IntroPhase extends GamePhase {
                     tasksAdded.add(taskType);
                     role.addTask(task.createTask());
                 }
+
+                whileLoops++;
             }
 
-            while (tasksAdded.size() < commonTaskCount + longTaskCount + shortTaskCount) {
+            whileLoops = 0;
+            while (tasksAdded.size() < commonTaskCount + longTaskCount + shortTaskCount && whileLoops < 100) {
                 TaskInteractable task = shortTasks.get(RandomUtil.rng.nextInt(shortTasks.size()));
                 TaskType taskType = task.getTaskType();
 
@@ -163,6 +170,8 @@ public class IntroPhase extends GamePhase {
                     tasksAdded.add(taskType);
                     role.addTask(task.createTask());
                 }
+
+                whileLoops++;
             }
         }
 

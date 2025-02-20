@@ -1,11 +1,13 @@
 package tecci.amogus.minigame.roles;
 
 import org.bukkit.entity.Player;
+import tecci.amogus.items.KnifeItem;
+import tecci.amogus.items.ReportItem;
+import tecci.amogus.items.TeleportItem;
 import tecci.amogus.managers.GameManager;
-import tecci.amogus.minigame.DeathReason;
-import tecci.amogus.minigame.Interactable;
-import tecci.amogus.minigame.Role;
-import tecci.amogus.minigame.WinCondition;
+import tecci.amogus.minigame.*;
+import tecci.amogus.minigame.interactables.EmergencyButton;
+import tecci.amogus.minigame.interactables.Vent;
 
 public class JesterRole extends Role {
     public JesterRole(GameManager gameManager, Player player) {
@@ -21,7 +23,7 @@ public class JesterRole extends Role {
     }
 
     @Override
-    public boolean requiresRecheck() {
+    public boolean isTeamRole() {
         return true;
     }
 
@@ -32,13 +34,21 @@ public class JesterRole extends Role {
 
     @Override
     public void setRoleItems() {
-        //TODO
+        if (isDead()) {
+            roleItems.put(0, new TeleportItem(gameManager));
+        } else {
+            roleItems.put(0, new ReportItem(gameManager));
+        }
     }
 
     @Override
     public boolean canInteract(Interactable interactable) {
-        return false;
-        //TODO
+        if (interactable instanceof TaskInteractable) {
+            return false;
+        }
+
+        return interactable instanceof EmergencyButton;
+
     }
 
 

@@ -37,12 +37,14 @@ public class StartItem extends CustomItem {
                     .create();
 
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
+            return;
         } else if (playerCount > 15) {
             BaseComponent[] component = new ComponentBuilder()
                     .append(new TextComponent(ChatColor.RED + "The maximum player limit is 15. Reduce the number of players before starting."))
                     .create();
 
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
+            return;
         }
 
         if (gameManager.getPlayerManager().isHost(player) && gameManager.getCurrentPhase().getPhaseType() == GamePhaseType.LOBBY) {

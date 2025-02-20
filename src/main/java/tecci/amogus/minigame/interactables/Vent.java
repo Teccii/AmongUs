@@ -25,8 +25,20 @@ public class Vent extends Interactable {
         connectedVents.add(vent);
     }
 
+    public void connectVents(Vent... vents) {
+        for (Vent vent : vents) {
+            connectVent(vent);
+        }
+    }
+
     public void disconnectVent(Vent vent) {
         connectedVents.remove(vent);
+    }
+
+    public void disconnectVents(Vent... vents) {
+        for (Vent vent : vents) {
+            disconnectVent(vent);
+        }
     }
 
     public boolean isPlayerInVent(Player player) {

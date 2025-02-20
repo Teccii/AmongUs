@@ -9,7 +9,6 @@ import java.util.*;
 public class MeetingManager {
     private final GameManager gameManager;
     private final Map<UUID, UUID> playerVotes = new HashMap<>();
-    private final Set<UUID> newDeadBodies = new HashSet<>();
     private UUID meetingHost = null;
     private boolean canVote = false;
 
@@ -118,21 +117,5 @@ public class MeetingManager {
 
     public UUID getMeetingHost() {
         return meetingHost;
-    }
-
-    public Set<UUID> getNewDeadBodies() {
-        return newDeadBodies;
-    }
-
-    public void addNewDeadBody(Player player) {
-        newDeadBodies.add(player.getUniqueId());
-    }
-
-    public void removeDeadBody(Player player) {
-        newDeadBodies.remove(player.getUniqueId());
-    }
-
-    public void clearNewDeadBodies() {
-        newDeadBodies.clear();
     }
 }

@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.w3c.dom.Text;
 import tecci.amogus.items.CustomItem;
 import tecci.amogus.items.VoteItem;
 import tecci.amogus.managers.GameManager;
@@ -45,12 +46,16 @@ public class MeetingBeginPhase extends GamePhase {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             String title = new TextComponent(ChatColor.RED + reason.toString()).toLegacyText();
+            String subtitle = new TextComponent(ChatColor.WHITE + meetingHost.getName() + switch (reason) {
+                case MeetingReason.DEAD_BODY -> " found a dead body";
+                case MeetingReason.EMERGENCY_BUTTON -> " pushed the emergency button";
+            }).toLegacyText();
 
-            player.sendTitle(title, null, 10, 40, 10);
+            player.sendTitle(title, subtitle, 10, 40, 10);
             player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 6, 1, false, false));
 
             Map<Integer, CustomItem> meetingLoadout = new HashMap<>();
-            meetingLoadout.put(4, new VoteItem(gameManager));
+            meetingLoadout.put(0, new VoteItem(gameManager));
 
             itemManager.setLoadout(player, meetingLoadout);
         }

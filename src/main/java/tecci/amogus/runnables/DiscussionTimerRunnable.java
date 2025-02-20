@@ -1,5 +1,12 @@
 package tecci.amogus.runnables;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.GamePhase;
 import tecci.amogus.minigame.phases.VotingPhase;
@@ -17,7 +24,13 @@ public class DiscussionTimerRunnable extends PhaseTimerRunnable {
 
     @Override
     public void timerTick() {
-        //show the time somewhere
+        BaseComponent[] component = new ComponentBuilder()
+                .append(new TextComponent(ChatColor.AQUA + "Discussion: " + timer + "s"))
+                .create();
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
+        }
     }
 
     @Override

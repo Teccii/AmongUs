@@ -4,12 +4,10 @@ import tecci.amogus.managers.GameManager;
 
 public abstract class Task {
     protected final GameManager gameManager;
-    protected final TaskInteractable interactable;
     protected boolean completed = false;
 
-    public Task(GameManager gameManager, TaskInteractable interactable) {
+    public Task(GameManager gameManager) {
         this.gameManager = gameManager;
-        this.interactable = interactable;
     }
 
     public boolean isCompleted() {
@@ -18,6 +16,8 @@ public abstract class Task {
 
     public void submitTask() {
         completed = true;
+
+        gameManager.checkVictory();
     }
 
     public abstract TaskType getTaskType();

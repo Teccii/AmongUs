@@ -14,6 +14,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import tecci.amogus.util.LocationUtil;
+import tecci.amogus.util.RandomUtil;
 
 import java.util.*;
 
@@ -41,15 +42,15 @@ public class GlowingManager {
         }
 
         ProtocolManager protocolManager = gameManager.getProtocolManager();
-        int entityId = new Random().nextInt();
+        int entityId = RandomUtil.rng.nextInt();
 
         PacketContainer spawnPacket = new PacketContainer(PacketType.Play.Server.SPAWN_ENTITY);
         spawnPacket.getIntegers().write(0, entityId);
         spawnPacket.getUUIDs().write(0, UUID.randomUUID());
         spawnPacket.getEntityTypeModifier().write(0, EntityType.BLOCK_DISPLAY);
-        spawnPacket.getDoubles().write(0, loc.getX());
-        spawnPacket.getDoubles().write(1, loc.getY());
-        spawnPacket.getDoubles().write(2, loc.getZ());
+        spawnPacket.getDoubles().write(0, loc.getX())
+                .write(1, loc.getY())
+                .write(2, loc.getZ());
 
         protocolManager.sendServerPacket(receiver, spawnPacket);
 
@@ -87,15 +88,15 @@ public class GlowingManager {
 
             WrappedBlockData wrappedBlockData = WrappedBlockData.createData(pair.getSecond());
             ProtocolManager protocolManager = gameManager.getProtocolManager();
-            int entityId = new Random().nextInt();
+            int entityId = RandomUtil.rng.nextInt();
 
             PacketContainer spawnPacket = new PacketContainer(PacketType.Play.Server.SPAWN_ENTITY);
             spawnPacket.getIntegers().write(0, entityId);
             spawnPacket.getUUIDs().write(0, UUID.randomUUID());
             spawnPacket.getEntityTypeModifier().write(0, EntityType.BLOCK_DISPLAY);
-            spawnPacket.getDoubles().write(0, loc.getX());
-            spawnPacket.getDoubles().write(1, loc.getY());
-            spawnPacket.getDoubles().write(2, loc.getZ());
+            spawnPacket.getDoubles().write(0, loc.getX())
+                    .write(1, loc.getY())
+                    .write(2, loc.getZ());
 
             protocolManager.sendServerPacket(receiver, spawnPacket);
 

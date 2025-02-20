@@ -7,14 +7,13 @@ public abstract class GamePhase {
         LOBBY,              //LOBBY ->              STARTING
         STARTING,           //STARTING ->           INTRO | LOBBY
         INTRO,              //INTRO ->              ACTIVE
-        ACTIVE,             //ACTIVE ->             MEETING_BEGIN | OVER
-        MEETING_BEGIN,      //MEETING_BEGIN ->      DISCUSSION | OVER
-        DISCUSSION,         //DISCUSSION ->         VOTING | OVER
-        VOTING,             //VOTING ->             EJECTING | OVER
-        EJECTING,           //EJECTING ->           ACTIVE | OVER
-        GAME_OVER,               //OVER ->               CLEAN_UP
+        ACTIVE,             //ACTIVE ->             MEETING_BEGIN | GAME_OVER
+        MEETING_BEGIN,      //MEETING_BEGIN ->      DISCUSSION | GAME_OVER
+        DISCUSSION,         //DISCUSSION ->         VOTING | GAME_OVER
+        VOTING,             //VOTING ->             EJECTING | GAME_OVER
+        EJECTING,           //EJECTING ->           ACTIVE | GAME_OVER
+        GAME_OVER,          //GAME_OVER ->          CLEAN_UP
         CLEAN_UP;           //CLEAN_UP ->           LOBBY
-
 
         @Override
         public String toString() {

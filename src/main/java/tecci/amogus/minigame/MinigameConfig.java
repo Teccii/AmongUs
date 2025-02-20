@@ -1,6 +1,7 @@
 package tecci.amogus.minigame;
 
 import tecci.amogus.managers.MapManager;
+import tecci.amogus.util.MathUtil;
 
 public class MinigameConfig {
     public enum TaskBarUpdates {
@@ -51,14 +52,14 @@ public class MinigameConfig {
 
     public int getImpostorCount() { return impostorCount; }
     public MinigameConfig setImpostorCount(int value) {
-        this.impostorCount = clamp(value, 1, 3);
+        this.impostorCount = MathUtil.clamp(value, 1, 3);
         return this;
     }
 
     public double getImpostorKillCooldownSeconds() { return impostorKillCooldown * 2.5 + 7.5; }
     public int getImpostorKillCooldown() { return impostorKillCooldown; }
     public MinigameConfig setImpostorKillCooldown(int value) {
-        this.impostorKillCooldown = clamp(value, 1, 21);
+        this.impostorKillCooldown = MathUtil.clamp(value, 1, 21);
         return this;
     }
 
@@ -70,28 +71,28 @@ public class MinigameConfig {
 
     public int getEmergencyMeetings() { return emergencyMeetings; }
     public MinigameConfig setEmergencyMeetings(int value) {
-        this.emergencyMeetings = clamp(value, 0, 9);
+        this.emergencyMeetings = MathUtil.clamp(value, 0, 9);
         return this;
     }
 
     public double getEmergencyCooldownSeconds() { return emergencyCooldown * 5.0; }
     public int getEmergencyCooldown() { return emergencyCooldown; }
     public MinigameConfig setEmergencyCooldown(int value) {
-        this.emergencyCooldown = clamp(value, 0, 12);
+        this.emergencyCooldown = MathUtil.clamp(value, 0, 12);
         return this;
     }
 
     public double getDiscussionTimeSeconds() { return discussionTime * 15.0; }
     public int getDiscussionTime() { return discussionTime; }
     public MinigameConfig setDiscussionTime(int value) {
-        this.discussionTime = clamp(value, 0, 8);
+        this.discussionTime = MathUtil.clamp(value, 0, 8);
         return this;
     }
 
     public double getVotingTimeSeconds() { return votingTime * 15.0; }
     public int getVotingTime() { return votingTime; }
     public MinigameConfig setVotingTime(int value) {
-        this.votingTime = clamp(value, 0, 8);
+        this.votingTime = MathUtil.clamp(value, 0, 8);
         return this;
     }
 
@@ -115,19 +116,19 @@ public class MinigameConfig {
 
     public int getCommonTaskCount() { return commonTaskCount; }
     public MinigameConfig setCommonTaskCount(int value) {
-        this.commonTaskCount = clamp(value, 0, 2);
+        this.commonTaskCount = MathUtil.clamp(value, 0, 2);
         return this;
     }
 
     public int getLongTaskCount() { return longTaskCount; }
     public MinigameConfig setLongTaskCount(int value) {
-        this.longTaskCount = clamp(value, 0, 2);
+        this.longTaskCount = MathUtil.clamp(value, 0, 2);
         return this;
     }
 
     public int getShortTaskCount() { return shortTaskCount; }
     public MinigameConfig setShortTaskCount(int value) {
-        this.shortTaskCount = clamp(value, 0, 5);
+        this.shortTaskCount = MathUtil.clamp(value, 0, 5);
         return this;
     }
 
@@ -145,17 +146,7 @@ public class MinigameConfig {
 
     public int getJesterChance() { return jesterChance; }
     public MinigameConfig setJesterChance(int value) {
-        this.jesterChance = clamp(value, 0, 10);
+        this.jesterChance = MathUtil.clamp(value, 0, 10);
         return this;
-    }
-
-    static int clamp(int value, int min, int max) {
-        if (value < min) {
-            return min;
-        }  else if (value > max) {
-            return max;
-        }
-
-        return value;
     }
 }

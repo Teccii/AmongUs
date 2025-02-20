@@ -4,6 +4,8 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 import tecci.amogus.AmongUsPlugin;
 import tecci.amogus.adapters.HeldItemAdapter;
 import tecci.amogus.minigame.GamePhase;
@@ -24,24 +26,30 @@ public class GameManager {
     private GamePhase currentPhase;
 
     //Other Managers
+    private final CorpseManager corpseManager;
     private final ItemManager itemManager;
     private final MapManager mapManager;
     private final MeetingManager meetingManager;
     private final GlowingManager glowingManager;
     private final PlayerManager playerManager;
     private final ProtocolManager protocolManager;
+    private final SabotageManager sabotageManager;
+    private final Scoreboard scoreboard;
 
     public GameManager(AmongUsPlugin plugin) {
         this.plugin = plugin;
         config = new MinigameConfig();
 
+        corpseManager = new CorpseManager(this);
         itemManager = new ItemManager(this);
         mapManager = new MapManager(this);
         meetingManager = new MeetingManager(this);
         glowingManager = new GlowingManager(this);
         playerManager = new PlayerManager(this);
-        protocolManager = ProtocolLibrary.getProtocolManager();
+        sabotageManager = new SabotageManager(this);
+        scoreboard = plugin.getServer().getScoreboardManager().getNewScoreboard();
 
+        protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.addPacketListener(new HeldItemAdapter(this));
 
         setPhase(new CleanUpPhase(this));
@@ -54,12 +62,15 @@ public class GameManager {
         this.config = config;
     }
 
+    public CorpseManager getCorpseManager() { return corpseManager; }
     public ItemManager getItemManager() { return itemManager; }
     public MapManager getMapManager() { return mapManager; }
     public MeetingManager getMeetingManager() { return meetingManager; }
     public GlowingManager getGlowingManager() { return glowingManager; }
     public PlayerManager getPlayerManager() { return playerManager; }
     public ProtocolManager getProtocolManager() { return protocolManager; }
+    public SabotageManager getSabotageManager() { return sabotageManager; }
+    public Scoreboard getScoreboard() { return scoreboard; }
 
     public GamePhase getCurrentPhase() { return currentPhase; }
     public void setPhase(GamePhase nextPhase) {
@@ -76,6 +87,7 @@ public class GameManager {
         currentPhase.onStart();
     }
 
+    //on kill, player ejected, player quit, task completed
     public boolean checkVictory() {
         Set<WinCondition> winConditions = new HashSet<>();
         List<Player> winners = new ArrayList<>();
@@ -86,10 +98,10 @@ public class GameManager {
             if (role != null && !role.isNonPlayingRole()) {
                 WinCondition winCondition = role.getWinCondition();
 
-                if ((!winConditions.contains(winCondition) || role.requiresRecheck()) && role.checkVictory()) {
+                if ((!winConditions.contains(winCondition) || !role.isTeamRole()) && role.checkVictory()) {
                     winConditions.add(winCondition);
                     winners.add(player);
-                } else if (winConditions.contains(winCondition) && !role.requiresRecheck()) {
+                } else if (winConditions.contains(winCondition) && role.isTeamRole()) {
                     winners.add(player);
                 }
             }

@@ -25,7 +25,7 @@ public class StartCountdownRunnable extends PhaseTimerRunnable {
     @Override
     public void timerTick() {
         BaseComponent[] component = new ComponentBuilder()
-                .append(new TextComponent(ChatColor.GREEN + "Starting in " + timer))
+                .append(new TextComponent(ChatColor.GREEN + "Starting in " + timer + "s"))
                 .create();
 
         for (Player player : Bukkit.getOnlinePlayers()) {

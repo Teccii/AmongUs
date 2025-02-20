@@ -171,15 +171,12 @@ public class OptionsBook extends GuiInteractable {
     }
 
     @Override
-    public void interact(Player player) {
-        Window.single()
-                .setGui(getGui(player))
-                .setTitle("Options Book")
-                .addCloseHandler(this::saveConfig)
-                .open(player);
+    public String getTitle() {
+        return "Options Book";
     }
 
-    private void saveConfig() {
+    @Override
+    public void closeHandler() {
         gameManager.setConfig(config);
     }
 }

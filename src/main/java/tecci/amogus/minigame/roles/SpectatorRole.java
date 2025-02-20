@@ -1,6 +1,7 @@
 package tecci.amogus.minigame.roles;
 
 import org.bukkit.entity.Player;
+import tecci.amogus.items.TeleportItem;
 import tecci.amogus.managers.GameManager;
 import tecci.amogus.minigame.Interactable;
 import tecci.amogus.minigame.Role;
@@ -27,7 +28,7 @@ public class SpectatorRole extends Role {
     }
 
     @Override
-    public boolean requiresRecheck() {
+    public boolean isTeamRole() {
         return false;
     }
 
@@ -38,14 +39,11 @@ public class SpectatorRole extends Role {
 
     @Override
     public void setRoleItems() {
-        //TODO
+        roleItems.put(0, new TeleportItem(gameManager));
     }
 
     @Override
-    public boolean canInteract(Interactable interactable) {
-        return false;
-        //TODO
-    }
+    public boolean canInteract(Interactable interactable) { return false; }
 
     @Override
     public boolean canInteractWithPlayer(Player target) {
